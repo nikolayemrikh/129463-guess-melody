@@ -1,7 +1,7 @@
 # Личный проект «Угадай мелодию» [![Build status][travis-image]][travis-url]
 
 * Студент: [Николай Эмрих](https://up.htmlacademy.ru/ecmascript/3/user/129463).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Щепотьев](https://up.htmlacademy.ru/ecmascript/3/user/125753).
 
 ---
 
