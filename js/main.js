@@ -1,10 +1,12 @@
-const keyCodes = {
+const KeyCodes = {
   LEFT_ARROW: 37,
   RIGHT_ARROW: 39
 };
 
 const app = document.querySelector(`.app`);
-const tpls = Array.from(window.templates.content.querySelectorAll(`.main`));
+const tpls = Array.from(
+    document.querySelector(`#templates`).content.querySelectorAll(`.main`)
+);
 
 let currentTplIndex = 0;
 
@@ -20,9 +22,9 @@ document.addEventListener(`keydown`, (key) => {
   if (!key.altKey) {
     return;
   }
-  if (key.keyCode === keyCodes.LEFT_ARROW) {
+  if (key.keyCode === KeyCodes.LEFT_ARROW) {
     showTemplate(currentTplIndex - 1);
-  } else if (key.keyCode === keyCodes.RIGHT_ARROW) {
+  } else if (key.keyCode === KeyCodes.RIGHT_ARROW) {
     showTemplate(currentTplIndex + 1);
   }
 });
