@@ -1,32 +1,30 @@
-class App {
-  constructor() {
-    this._el = document.querySelector(`.app`);
-    this._templates = Array.from(window.templates.content.querySelectorAll(`.main`));
-    this._currentTplIndex = 0;
-    this.showTemplate();
-  }
+const keyCodes = {
+  LEFT_ARROW: 37,
+  RIGHT_ARROW: 39
+};
 
-  showTemplate(i = 0) {
-    let main = this._el.querySelector(`.main`);
-    if (i >= 0 && i < this._templates.length) {
-      main.outerHTML = this._templates[i].outerHTML;
-      this._currentTplIndex = i;
-    }
-  }
+const app = document.querySelector(`.app`);
+const tpls = Array.from(window.templates.content.querySelectorAll(`.main`));
 
-  handleSwitch() {
-    document.addEventListener(`keydown`, (key) => {
-      if (!key.altKey) {
-        return;
-      }
-      if (key.keyCode === 37) {
-        this.showTemplate(this._currentTplIndex - 1);
-      } else if (key.keyCode === 39) {
-        this.showTemplate(this._currentTplIndex + 1);
-      }
-    });
-  }
-}
+let currentTplIndex = 0;
 
-const app = new App();
-app.handleSwitch();
+const showTemplate = (i = 0) => {
+  const main = app.querySelector(`.main`);
+  if (i >= 0 && i < tpls.length) {
+    main.outerHTML = tpls[i].outerHTML;
+    currentTplIndex = i;
+  }
+};
+
+document.addEventListener(`keydown`, (key) => {
+  if (!key.altKey) {
+    return;
+  }
+  if (key.keyCode === keyCodes.LEFT_ARROW) {
+    showTemplate(currentTplIndex - 1);
+  } else if (key.keyCode === keyCodes.RIGHT_ARROW) {
+    showTemplate(currentTplIndex + 1);
+  }
+});
+
+showTemplate();
