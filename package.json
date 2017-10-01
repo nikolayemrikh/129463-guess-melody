@@ -4,7 +4,7 @@
   "private": true,
   "description": "Личный проект «Угадай мелодию» от HTML Academy",
   "scripts": {
-    "eslint": "eslint js/",
+    "eslint": "eslint gulpfile.js js/",
     "build": "gulp build",
     "start": "gulp serve",
     "test": "npm run eslint && gulp test"
