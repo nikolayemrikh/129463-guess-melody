@@ -1,4 +1,5 @@
-import {getElement, render} from '../utils';
+import getElement from '../utils/get-element';
+import show from '../utils/show';
 import resultWin from './result-win';
 import resultTimeOver from './result-time-over';
 import resultAttemptsOver from './result-attempts-over';
@@ -92,7 +93,7 @@ const answerCheckboxes = [...form.answer];
 const submitBtn = form.querySelector(`.genre-answer-send`);
 submitBtn.disabled = true;
 
-form.addEventListener(`change`, function () {
+form.addEventListener(`change`, () => {
   submitBtn.disabled = !answerCheckboxes.some((checkbox) => checkbox.checked);
 });
 
@@ -100,7 +101,7 @@ const components = [resultWin, resultTimeOver, resultAttemptsOver];
 
 form.addEventListener(`submit`, function (evt) {
   evt.preventDefault();
-  render(components[Math.floor(Math.random() * components.length)]);
+  show(components[Math.floor(Math.random() * components.length)]);
   answerCheckboxes.forEach((checkbox) => {
     checkbox.checked = false;
     submitBtn.disabled = true;

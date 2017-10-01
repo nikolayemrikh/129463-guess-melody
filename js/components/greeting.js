@@ -1,4 +1,5 @@
-import {getElement, render} from '../utils';
+import getElement from '../utils/get-element';
+import show from '../utils/show';
 import gameArtist from './game-artist';
 
 const template = `<section class="main main--welcome">
@@ -13,8 +14,8 @@ const template = `<section class="main main--welcome">
 </section>`;
 
 const el = getElement(template);
-el.querySelector(`.main-play`).addEventListener(`click`, function () {
-  render(gameArtist);
+el.querySelector(`.main-play`).addEventListener(`click`, () => {
+  show(gameArtist);
 });
 
 export default el;

@@ -1,4 +1,5 @@
-import {getElement, render} from '../utils';
+import getElement from '../utils/get-element';
+import show from '../utils/show';
 import gameGenre from './game-genre';
 
 const template = `<section class="main main--level main--level-artist">
@@ -62,8 +63,8 @@ const template = `<section class="main main--level main--level-artist">
 </section>`;
 
 const el = getElement(template);
-el.querySelector(`.main-list`).addEventListener(`change`, function (evt) {
-  render(gameGenre);
+el.querySelector(`.main-list`).addEventListener(`change`, (evt) => {
+  show(gameGenre);
   evt.target.checked = false;
 });
 

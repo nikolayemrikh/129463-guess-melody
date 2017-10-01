@@ -1,4 +1,4 @@
-import {render} from './utils';
-import {greeting} from './components';
+import show from './utils/show';
+import greeting from './components/greeting';
 
-render(greeting);
+show(greeting);

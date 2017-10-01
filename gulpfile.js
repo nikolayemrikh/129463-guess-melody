@@ -13,7 +13,6 @@ const rename = require('gulp-rename');
 const imagemin = require('gulp-imagemin');
 const rollup = require('gulp-better-rollup');
 const sourcemaps = require('gulp-sourcemaps');
-const nodeResolve = require('rollup-plugin-node-resolve');
 
 gulp.task('style', function () {
   return gulp.src('sass/style.scss')
@@ -42,9 +41,7 @@ gulp.task('scripts', function () {
   return gulp.src('js/main.js')
     .pipe(plumber())
     .pipe(sourcemaps.init())
-    .pipe(rollup({
-      plugins: [nodeResolve()]
-    }, 'iife'))
+    .pipe(rollup({}, 'iife'))
     .pipe(sourcemaps.write(''))
     .pipe(gulp.dest('build/js'));
 });

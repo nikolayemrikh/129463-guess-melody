@@ -1,4 +1,5 @@
-import {getElement, render} from '../utils';
+import getElement from '../utils/get-element';
+import show from '../utils/show';
 import greeting from './greeting';
 
 const template = `<section class="main main--result">
@@ -10,8 +11,8 @@ const template = `<section class="main main--result">
 </section>`;
 
 const el = getElement(template);
-el.querySelector(`.main-replay`).addEventListener(`click`, function () {
-  render(greeting);
+el.querySelector(`.main-replay`).addEventListener(`click`, () => {
+  show(greeting);
 });
 
 export default el;
