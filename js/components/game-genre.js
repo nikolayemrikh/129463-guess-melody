@@ -81,7 +81,7 @@ const template = `<section class="main main--level main--level-genre">
         <label class="genre-answer-check" for="a-4"></label>
       </div>
 
-      <button class="genre-answer-send" type="submit" disabled>Ответить</button>
+      <button class="genre-answer-send" type="submit">Ответить</button>
     </form>
   </div>
 </section>`;
@@ -90,6 +90,7 @@ const el = getElement(template);
 const form = el.querySelector(`.genre`);
 const answerCheckboxes = [...form.answer];
 const submitBtn = form.querySelector(`.genre-answer-send`);
+submitBtn.disabled = true;
 
 form.addEventListener(`change`, function () {
   submitBtn.disabled = !answerCheckboxes.some((checkbox) => checkbox.checked);
@@ -102,6 +103,7 @@ form.addEventListener(`submit`, function (evt) {
   render(components[Math.floor(Math.random() * components.length)]);
   answerCheckboxes.forEach((checkbox) => {
     checkbox.checked = false;
+    submitBtn.disabled = true;
   });
 });
 
