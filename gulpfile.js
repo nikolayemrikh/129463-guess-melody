@@ -13,6 +13,7 @@ const rename = require(`gulp-rename`);
 const imagemin = require(`gulp-imagemin`);
 const rollup = require(`gulp-better-rollup`);
 const sourcemaps = require(`gulp-sourcemaps`);
+const mocha = require(`gulp-mocha`);
 
 gulp.task(`style`, () => {
   return gulp.src(`sass/style.scss`)
@@ -46,7 +47,15 @@ gulp.task(`scripts`, () => {
       .pipe(gulp.dest(`build/js`));
 });
 
-gulp.task(`test`, () => {
+gulp.task(`test`, function () {
+  return gulp
+      .src([`js/**/*.test.js`], {
+        read: false
+      })
+      .pipe(mocha({
+        compilers: [`js:babel-register`],
+        reporter: `spec`
+      }));
 });
 
 gulp.task(`imagemin`, [`copy`], () => {
