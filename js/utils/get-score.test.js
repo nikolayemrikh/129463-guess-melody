@@ -79,7 +79,7 @@ if invoked with 10 answers and 0 - 3 remaining notes`, () => {
   });
 
   it(`Should throw an error if invoked with incompatible data types`, () => {
-    let expectedArrayMsg = `First passed argument is not instance of Array`;
+    const expectedArrayMsg = `First passed argument is not instance of Array`;
     handleThrow(getScore, [``, 1], expectedArrayMsg);
     handleThrow(getScore, [{}, 1], expectedArrayMsg);
     handleThrow(getScore, [true, 1], expectedArrayMsg);
@@ -88,7 +88,7 @@ if invoked with 10 answers and 0 - 3 remaining notes`, () => {
     handleThrow(getScore, [3, 1], expectedArrayMsg);
     handleThrow(getScore, [NaN, 1], expectedArrayMsg);
 
-    let expectedIntegerMsg = `Second passed argument is not integer`;
+    const expectedIntegerMsg = `Second passed argument is not integer`;
     handleThrow(getScore, [[], []], expectedIntegerMsg);
     handleThrow(getScore, [[], ``], expectedIntegerMsg);
     handleThrow(getScore, [[], `2`], expectedIntegerMsg);

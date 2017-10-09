@@ -1,4 +1,5 @@
 import assert from 'assert';
+import handleThrow from './handle-assert-throw';
 import getPluralForm from './get-plural-form';
 
 const titles = [`минута`, `минуты`, `минут`];
@@ -26,7 +27,7 @@ describe(`check plural form`, () => {
     assert.strictEqual(getPluralForm(104, titles), rightResult);
   });
 
-  it(`other`, () => {
+  it(`other numbers`, () => {
     const rightResult = `минут`;
     assert.strictEqual(getPluralForm(0, titles), rightResult);
     assert.strictEqual(getPluralForm(5, titles), rightResult);
@@ -49,5 +50,34 @@ describe(`check plural form`, () => {
     assert.strictEqual(getPluralForm(112, titles), rightResult);
     assert.strictEqual(getPluralForm(113, titles), rightResult);
     assert.strictEqual(getPluralForm(114, titles), rightResult);
+  });
+
+  it(`should throw an error if invoked with incompatible data types`, () => {
+    const expectedIntegerMsg = `First passed argument is not integer`;
+    handleThrow(getPluralForm, [[], []], expectedIntegerMsg);
+    handleThrow(getPluralForm, [``, []], expectedIntegerMsg);
+    handleThrow(getPluralForm, [`2`, []], expectedIntegerMsg);
+    handleThrow(getPluralForm, [{}, []], expectedIntegerMsg);
+    handleThrow(getPluralForm, [true, []], expectedIntegerMsg);
+    handleThrow(getPluralForm, [false, []], expectedIntegerMsg);
+    handleThrow(getPluralForm, [NaN, []], expectedIntegerMsg);
+    handleThrow(getPluralForm, [Infinity, []], expectedIntegerMsg);
+    handleThrow(getPluralForm, [-Infinity, []], expectedIntegerMsg);
+
+    const expectedArrayMsg = `Second passed argument is not instance of Array`;
+    handleThrow(getPluralForm, [1, ``], expectedArrayMsg);
+    handleThrow(getPluralForm, [1, {}], expectedArrayMsg);
+    handleThrow(getPluralForm, [1, true], expectedArrayMsg);
+    handleThrow(getPluralForm, [1, false], expectedArrayMsg);
+    handleThrow(getPluralForm, [1, `[1, 2]`], expectedArrayMsg);
+    handleThrow(getPluralForm, [1, 3], expectedArrayMsg);
+    handleThrow(getPluralForm, [1, NaN], expectedArrayMsg);
+  });
+
+  it(`should throw an error if elements in titles array are not of type string`, () => {
+    const expectedMsg = `Elements in array of titles must be a strings`;
+    handleThrow(getPluralForm, [1, [1, 2, 3]], expectedMsg);
+    handleThrow(getPluralForm, [1, [[], `k`, {}]], expectedMsg);
+    handleThrow(getPluralForm, [1, [null, `минуты`, `минут`]], expectedMsg);
   });
 });
