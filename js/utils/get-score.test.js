@@ -1,9 +1,24 @@
 import assert from 'assert';
 import getScore from './get-score';
 
+/**
+ * Wrap for assert.throws
+ * Compares expectedErrorMessage with throwed from fn with args
+ * @param {Function} fn — function to call
+ * @param {[]} args — arguments for fn
+ * @param {string} expectedErrorMessage
+ **/
+const handleThrow = (fn, args, expectedErrorMessage) => {
+  assert.throws(() => {
+    fn(...args);
+  }, (err) => {
+    return err.message === expectedErrorMessage;
+  });
+};
+
 describe(`getScore(answers, remainingNotes)`, () => {
   it(`Should return a number that lies in interval [1, 20] \
-    if invoked with 10 answers and 0 - 3 remaining notes`, () => {
+if invoked with 10 answers and 0 - 3 remaining notes`, () => {
         for (let k = 0; k < 100; k++) { // 100 раз проверим с разными данными
           const answers = [];
           for (let i = 0; i < 10; i++) { // 10 ответов
@@ -17,15 +32,15 @@ describe(`getScore(answers, remainingNotes)`, () => {
         }
       });
 
-  it(`Should return -1 if invoked with < 10 or > 10 answers`, () => {
+  it(`Should throw an error if invoked with < 10 or > 10 answers`, () => {
     const answers = [];
     for (let i = 0; i < 9; i++) {
       answers[i] = {
         timeInSec: Math.floor(Math.random() * 45)
       };
     }
-    const result1 = getScore(answers, Math.floor(Math.random() * 4));
-    assert.strictEqual(result1, -1, `invoked with 9 answers`);
+    const expectedMsg = `Array of answers must have length === 10`;
+    handleThrow(getScore, [answers, Math.floor(Math.random() * 4)], expectedMsg);
 
     for (let i = 9; i < 12; i++) {
       answers[i] = {
@@ -33,41 +48,56 @@ describe(`getScore(answers, remainingNotes)`, () => {
       };
     }
 
-    const result2 = getScore(answers, Math.floor(Math.random() * 4));
-    assert.strictEqual(result2, -1, `invoked with 11 answers`);
+    handleThrow(getScore, [answers, Math.floor(Math.random() * 4)], expectedMsg);
   });
 
-  it(`Should return -1 if invoked with < 0 or > 3 remaining notes`, () => {
+  it(`Should throw an error if invoked with < 0 or > 3 remaining notes`, () => {
     const answers = [];
     for (let i = 0; i < 10; i++) {
       answers[i] = {
         timeInSec: Math.floor(Math.random() * 45)
       };
     }
-    assert.strictEqual(getScore(answers, -1), -1, `invoked with -1 remaining notes`);
-    assert.strictEqual(getScore(answers, 4), -1, `invoked with 4 remaining notes`);
+
+    let expectedMsg = `Number of remaining notes must lie in interval 0 — 3`;
+    handleThrow(getScore, [answers, -1], expectedMsg);
+    handleThrow(getScore, [answers, 4], expectedMsg);
   });
 
-  it(`Should return -1 if invoked with not round number of remaining notes`, () => {
+  it(`Should throw an error if invoked with not integer of remaining notes`, () => {
     const answers = [];
     for (let i = 0; i < 10; i++) {
       answers[i] = {
         timeInSec: Math.floor(Math.random() * 45)
       };
     }
-    assert.strictEqual(getScore(answers, 0.215123), -1, `invoked with 0.21512 remaining notes`);
-    assert.strictEqual(getScore(answers, 2.5), -1, `invoked with 2.5 remaining notes`);
-    assert.strictEqual(getScore(answers, Math.PI), -1, `invoked with Math.PI remaining notes`);
+
+    let expectedMsg = `Second passed argument is not integer`;
+    handleThrow(getScore, [answers, 0.215123], expectedMsg);
+    handleThrow(getScore, [answers, 123.91823213], expectedMsg);
+    handleThrow(getScore, [answers, Math.PI], expectedMsg);
   });
 
-  it(`Should return -1 if invoked with incompatible data types`, () => {
-    assert.strictEqual(getScore(``, []), -1);
-    assert.strictEqual(getScore({}, `2`), -1);
-    assert.strictEqual(getScore(true, {}), -1);
-    assert.strictEqual(getScore(false), -1);
-    assert.strictEqual(getScore(`[1, 2]`, NaN), -1);
-    assert.strictEqual(getScore(3, Infinity), -1);
-    assert.strictEqual(getScore(NaN, -Infinity), -1);
+  it(`Should throw an error if invoked with incompatible data types`, () => {
+    let expectedArrayMsg = `First passed argument is not instance of Array`;
+    handleThrow(getScore, [``, 1], expectedArrayMsg);
+    handleThrow(getScore, [{}, 1], expectedArrayMsg);
+    handleThrow(getScore, [true, 1], expectedArrayMsg);
+    handleThrow(getScore, [false, 1], expectedArrayMsg);
+    handleThrow(getScore, [`[1, 2]`, 1], expectedArrayMsg);
+    handleThrow(getScore, [3, 1], expectedArrayMsg);
+    handleThrow(getScore, [NaN, 1], expectedArrayMsg);
+
+    let expectedIntegerMsg = `Second passed argument is not integer`;
+    handleThrow(getScore, [[], []], expectedIntegerMsg);
+    handleThrow(getScore, [[], ``], expectedIntegerMsg);
+    handleThrow(getScore, [[], `2`], expectedIntegerMsg);
+    handleThrow(getScore, [[], {}], expectedIntegerMsg);
+    handleThrow(getScore, [[], true], expectedIntegerMsg);
+    handleThrow(getScore, [[], false], expectedIntegerMsg);
+    handleThrow(getScore, [[], NaN], expectedIntegerMsg);
+    handleThrow(getScore, [[], Infinity], expectedIntegerMsg);
+    handleThrow(getScore, [[], -Infinity], expectedIntegerMsg);
   });
 
   it(`Should return 10 if invoked with 10 slow answers \

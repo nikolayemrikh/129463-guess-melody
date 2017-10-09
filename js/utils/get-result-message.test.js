@@ -29,8 +29,7 @@ but there're unused notes and time`, () => {
           remainingNotes: 2
         };
 
-        const rightResult = `Не выиграл, но не закончилось время и попытки, \
-что-то тут не так...`;
+        const rightResult = `Player neither did win, nor did lost, something goes wrong...`;
         assert.throws(() => {
           getResultMessage(playerResult, otherPlayersResults);
         }, (err) => {
