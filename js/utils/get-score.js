@@ -14,10 +14,9 @@ export default (answers, remainingNotes) => {
   let sum = 0;
   for (let i = 0; i < answers.length; i++) {
     const ans = answers[i];
+    sum++;
     if (ans.timeInSec < 30) {
-      sum += 2;
-    } else {
-      sum += 1;
+      sum++;
     }
   }
   return sum - (3 - remainingNotes) * 2;
