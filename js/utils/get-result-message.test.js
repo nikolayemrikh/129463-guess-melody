@@ -18,6 +18,22 @@ describe(`getResultMessage()`, () => {
     assert.strictEqual(result, rightResult);
   });
 
+  it(`Player win with no other players`, () => {
+    const otherPlayersResults = [];
+
+    const playerResult = {
+      isWin: true,
+      score: 16,
+      remainingTimeInSec: 20,
+      remainingNotes: 2
+    };
+
+    const result = getResultMessage(playerResult, otherPlayersResults);
+    const rightResult = `Вы заняли 1-ое место из 1 игроков. \
+Это лучше, чем у 0.00% игроков`;
+    assert.strictEqual(result, rightResult);
+  });
+
   it(`isWin in player's result object === false, \
 but there're unused notes and time`, () => {
         const otherPlayersResults = [10, 15];

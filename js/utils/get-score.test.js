@@ -59,7 +59,7 @@ if invoked with 10 answers and 0 - 3 remaining notes`, () => {
       };
     }
 
-    let expectedMsg = `Number of remaining notes must lie in interval 0 — 3`;
+    const expectedMsg = `Number of remaining notes must lie in interval 0 — 3`;
     handleThrow(getScore, [answers, -1], expectedMsg);
     handleThrow(getScore, [answers, 4], expectedMsg);
   });
@@ -72,7 +72,7 @@ if invoked with 10 answers and 0 - 3 remaining notes`, () => {
       };
     }
 
-    let expectedMsg = `Second passed argument is not integer`;
+    const expectedMsg = `Second passed argument is not integer`;
     handleThrow(getScore, [answers, 0.215123], expectedMsg);
     handleThrow(getScore, [answers, 123.91823213], expectedMsg);
     handleThrow(getScore, [answers, Math.PI], expectedMsg);
