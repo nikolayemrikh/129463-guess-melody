@@ -1,3 +1,5 @@
+import getPluralForm from './get-plural-form';
+const playersPluralForms = [`игрока`, `игроков`, `игроков`];
 export default (playerResult, otherPlayersResults) => {
   if (!Array.isArray(otherPlayersResults)) {
     throw new TypeError(`Second passed argument is not instance of Array`);
@@ -19,9 +21,19 @@ export default (playerResult, otherPlayersResults) => {
     otherPlayersResults.push(playerResult.score);
     otherPlayersResults.sort((a, b) => b - a); // Сортируем в порядке убывания
     const positionNumber = otherPlayersResults.indexOf(playerResult.score) + 1;
-    const percent = (otherPlayersResults.length - positionNumber) * 100 / otherPlayersResults.length;
-    const percentStr = !Number.isInteger(percent) ? percent.toFixed(2) : percent;
-    return `Вы заняли ${positionNumber}-ое место из ${otherPlayersResults.length} \
-игроков. Это лучше, чем у ${percentStr}% игроков`;
+    const percent = Math.round(
+        (otherPlayersResults.length - positionNumber) * 100 /
+        otherPlayersResults.length
+    );
+
+    const playerPluralForm = getPluralForm(otherPlayersResults.length, playersPluralForms);
+    const percentPluralForm = getPluralForm(percent, playersPluralForms);
+
+    return `\
+Вы\
+${otherPlayersResults.length === 1 ? `, как единственный сыгравший,` : ``} \
+заняли ${positionNumber}-ое место\
+${otherPlayersResults.length !== 1 ? ` из ${otherPlayersResults.length} ${playerPluralForm}` : ``}.\
+${otherPlayersResults.length !== 1 ? ` Это лучше, чем у ${percent}% ${percentPluralForm}` : ``}`;
   }
 };

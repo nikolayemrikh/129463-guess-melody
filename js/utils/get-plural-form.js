@@ -1,5 +1,5 @@
-export default (number, titles) => {
-  if (!Number.isInteger(number)) {
+export default (num, titles) => {
+  if (!Number.isInteger(num)) {
     throw new TypeError(`First passed argument is not integer`);
   }
   if (!Array.isArray(titles)) {
@@ -8,8 +8,13 @@ export default (number, titles) => {
   if (!titles.every((title) => typeof title === `string`)) {
     throw new TypeError(`Elements in array of titles must be a strings`);
   }
-  const cases = [2, 0, 1, 1, 1, 2];
-  return titles[(number % 100 > 4 && number % 100 < 20) ?
-    2 :
-    cases[(number % 10 < 5) ? number % 10 : 5]];
+
+  if ((num % 10 === 1) && (num % 100 !== 11)) {
+    return titles[0];
+  } else if ((num % 10 === 2 || num % 10 === 3 || num % 10 === 4) &&
+    !(num % 100 === 12 || num % 100 === 13 || num % 100 === 14)) {
+    return titles[1];
+  } else {
+    return titles[2];
+  }
 };

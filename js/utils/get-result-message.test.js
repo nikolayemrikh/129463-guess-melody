@@ -2,8 +2,26 @@ import assert from 'assert';
 import getResultMessage from './get-result-message';
 
 describe(`getResultMessage()`, () => {
-  it(`Player win`, () => {
-    const otherPlayersResults = [10, 15];
+  it(`should give right message if player get 1st place out of 3 players. \
+Message should be in second plural form`, () => {
+        const otherPlayersResults = [10, 15];
+
+        const playerResult = {
+          isWin: true,
+          score: 16,
+          remainingTimeInSec: 20,
+          remainingNotes: 2
+        };
+
+        const result = getResultMessage(playerResult, otherPlayersResults);
+        const rightResult = `Вы заняли 1-ое место из 3 игроков. \
+Это лучше, чем у 67% игроков`;
+        assert.strictEqual(result, rightResult);
+      });
+
+  it(`Should give a right message based on first plural form`, () => {
+    const otherPlayersResults = [10, 15, 10, 15, 10, 15, 10, 15, 10, 15, 10, 15,
+      10, 15, 10, 15, 10, 15, 10, 15];
 
     const playerResult = {
       isWin: true,
@@ -13,8 +31,8 @@ describe(`getResultMessage()`, () => {
     };
 
     const result = getResultMessage(playerResult, otherPlayersResults);
-    const rightResult = `Вы заняли 1-ое место из 3 игроков. \
-Это лучше, чем у 66.67% игроков`;
+    const rightResult = `Вы заняли 1-ое место из 21 игрока. \
+Это лучше, чем у 95% игроков`;
     assert.strictEqual(result, rightResult);
   });
 
@@ -45,8 +63,7 @@ describe(`getResultMessage()`, () => {
     };
 
     const result = getResultMessage(playerResult, otherPlayersResults);
-    const rightResult = `Вы заняли 1-ое место из 1 игроков. \
-Это лучше, чем у 0% игроков`;
+    const rightResult = `Вы, как единственный сыгравший, заняли 1-ое место.`;
     assert.strictEqual(result, rightResult);
   });
 

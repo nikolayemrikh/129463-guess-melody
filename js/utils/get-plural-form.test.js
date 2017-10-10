@@ -4,52 +4,76 @@ import getPluralForm from './get-plural-form';
 
 const titles = [`минута`, `минуты`, `минут`];
 
-describe(`check plural form`, () => {
-  it(`ends with 1 excluding numbers that ends with 11`, () => {
-    const rightResult = `минута`;
-    assert.strictEqual(getPluralForm(1, titles), rightResult);
-    assert.strictEqual(getPluralForm(21, titles), rightResult);
-    assert.strictEqual(getPluralForm(31, titles), rightResult);
-    assert.strictEqual(getPluralForm(61, titles), rightResult);
-    assert.strictEqual(getPluralForm(101, titles), rightResult);
-  });
+const firstForm = [
+  1, 21, 31, 41, 51, 61, 71, 81, 91, 101, 121, 131, 141, 151, 161, 171, 181,
+  191, 201, 221, 231, 241, 251, 261, 271, 281, 291
+];
 
-  it(`ends with 2 — 4 excluding numbers that ends with 12 — 14`, () => {
-    const rightResult = `минуты`;
-    assert.strictEqual(getPluralForm(2, titles), rightResult);
-    assert.strictEqual(getPluralForm(3, titles), rightResult);
-    assert.strictEqual(getPluralForm(4, titles), rightResult);
-    assert.strictEqual(getPluralForm(22, titles), rightResult);
-    assert.strictEqual(getPluralForm(23, titles), rightResult);
-    assert.strictEqual(getPluralForm(24, titles), rightResult);
-    assert.strictEqual(getPluralForm(102, titles), rightResult);
-    assert.strictEqual(getPluralForm(103, titles), rightResult);
-    assert.strictEqual(getPluralForm(104, titles), rightResult);
-  });
+const secondForm = [
+  2, 3, 4, 22, 23, 24, 32, 33, 34, 42, 43, 44, 52, 53, 54, 62, 63, 64, 72, 73,
+  74, 82, 83, 84, 92, 93, 94, 102, 103, 104, 122, 123, 124, 132, 133, 134, 142,
+  143, 144, 152, 153, 154, 162, 163, 164, 172, 173, 174, 182, 183
+];
 
-  it(`other numbers`, () => {
+const lastForm = [
+  0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 26, 27, 28,
+  29, 30, 35, 36, 37, 38, 39, 40, 45, 46, 47, 48, 49, 50, 55, 56, 57, 58, 59,
+  60, 65, 66, 67, 68, 69, 70, 75, 76, 77
+];
+
+describe(`pluralForm()`, () => {
+  it(`should give right result with numbers \
+which ends with 1 excluding numbers which ends with 11`, () => {
+        const rightResult = `минута`;
+        firstForm.forEach((num) => {
+          assert.strictEqual(getPluralForm(num, titles), rightResult, num);
+        });
+      });
+
+  it(`should give right result with numbers \
+which ends with 2 — 4 excluding numbers which ends with 12 — 14`, () => {
+        const rightResult = `минуты`;
+        secondForm.forEach((num) => {
+          assert.strictEqual(getPluralForm(num, titles), rightResult, num);
+        });
+      });
+
+  it(`should give right result with other numbers`, () => {
     const rightResult = `минут`;
-    assert.strictEqual(getPluralForm(0, titles), rightResult);
-    assert.strictEqual(getPluralForm(5, titles), rightResult);
-    assert.strictEqual(getPluralForm(6, titles), rightResult);
-    assert.strictEqual(getPluralForm(7, titles), rightResult);
-    assert.strictEqual(getPluralForm(8, titles), rightResult);
-    assert.strictEqual(getPluralForm(9, titles), rightResult);
-    assert.strictEqual(getPluralForm(10, titles), rightResult);
-    assert.strictEqual(getPluralForm(11, titles), rightResult);
-    assert.strictEqual(getPluralForm(12, titles), rightResult);
-    assert.strictEqual(getPluralForm(13, titles), rightResult);
-    assert.strictEqual(getPluralForm(14, titles), rightResult);
-    assert.strictEqual(getPluralForm(15, titles), rightResult);
-    assert.strictEqual(getPluralForm(16, titles), rightResult);
-    assert.strictEqual(getPluralForm(17, titles), rightResult);
-    assert.strictEqual(getPluralForm(18, titles), rightResult);
-    assert.strictEqual(getPluralForm(19, titles), rightResult);
-    assert.strictEqual(getPluralForm(20, titles), rightResult);
-    assert.strictEqual(getPluralForm(111, titles), rightResult);
-    assert.strictEqual(getPluralForm(112, titles), rightResult);
-    assert.strictEqual(getPluralForm(113, titles), rightResult);
-    assert.strictEqual(getPluralForm(114, titles), rightResult);
+    lastForm.forEach((num) => {
+      assert.strictEqual(getPluralForm(num, titles), rightResult, num);
+    });
+  });
+
+  it(`shouldn't give same result as numbers which ends with 1 excluding 11`, () => {
+    const rightResult = `минута`;
+    secondForm.forEach((num) => {
+      assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+    });
+    lastForm.forEach((num) => {
+      assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+    });
+  });
+
+  it(`shouldn't give same result as numbers which ends with 2 — 4 \
+excluding 12 — 14`, () => {
+        const rightResult = `минуты`;
+        firstForm.forEach((num) => {
+          assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+        });
+        lastForm.forEach((num) => {
+          assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+        });
+      });
+
+  it(`shouldn't give same result as other numbers`, () => {
+    const rightResult = `минут`;
+    firstForm.forEach((num) => {
+      assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+    });
+    secondForm.forEach((num) => {
+      assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+    });
   });
 
   it(`should throw an error if invoked with incompatible data types`, () => {
