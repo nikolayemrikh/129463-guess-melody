@@ -19,9 +19,9 @@ export default (playerResult, otherPlayersResults) => {
     otherPlayersResults.push(playerResult.score);
     otherPlayersResults.sort((a, b) => b - a); // Сортируем в порядке убывания
     const positionNumber = otherPlayersResults.indexOf(playerResult.score) + 1;
-    let percent = (otherPlayersResults.length - positionNumber) / otherPlayersResults.length;
-    percent = percent.toFixed(2);
+    const percent = (otherPlayersResults.length - positionNumber) * 100 / otherPlayersResults.length;
+    const percentStr = !Number.isInteger(percent) ? percent.toFixed(2) : percent;
     return `Вы заняли ${positionNumber}-ое место из ${otherPlayersResults.length} \
-игроков. Это лучше, чем у ${percent}% игроков`;
+игроков. Это лучше, чем у ${percentStr}% игроков`;
   }
 };

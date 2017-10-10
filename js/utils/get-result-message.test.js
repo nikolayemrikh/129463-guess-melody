@@ -14,11 +14,27 @@ describe(`getResultMessage()`, () => {
 
     const result = getResultMessage(playerResult, otherPlayersResults);
     const rightResult = `Вы заняли 1-ое место из 3 игроков. \
-Это лучше, чем у 0.67% игроков`;
+Это лучше, чем у 66.67% игроков`;
     assert.strictEqual(result, rightResult);
   });
 
-  it(`Player win with no other players`, () => {
+  it(`Should give top position between players with same score`, () => {
+    const otherPlayersResults = [17, 15, 15];
+
+    const playerResult = {
+      isWin: true,
+      score: 15,
+      remainingTimeInSec: 20,
+      remainingNotes: 2
+    };
+
+    const result = getResultMessage(playerResult, otherPlayersResults);
+    const rightResult = `Вы заняли 2-ое место из 4 игроков. \
+Это лучше, чем у 50% игроков`;
+    assert.strictEqual(result, rightResult);
+  });
+
+  it(`Should give first place out of 1 players if player win with no other players`, () => {
     const otherPlayersResults = [];
 
     const playerResult = {
@@ -30,11 +46,11 @@ describe(`getResultMessage()`, () => {
 
     const result = getResultMessage(playerResult, otherPlayersResults);
     const rightResult = `Вы заняли 1-ое место из 1 игроков. \
-Это лучше, чем у 0.00% игроков`;
+Это лучше, чем у 0% игроков`;
     assert.strictEqual(result, rightResult);
   });
 
-  it(`isWin in player's result object === false, \
+  it(`Should throw an error if isWin in player's result object === false, \
 but there're unused notes and time`, () => {
         const otherPlayersResults = [10, 15];
 
@@ -53,7 +69,7 @@ but there're unused notes and time`, () => {
         });
       });
 
-  it(`Time is over`, () => {
+  it(`Should give a message if time is over`, () => {
     const otherPlayersResults = [10, 15];
 
     const playerResult = {
@@ -68,7 +84,7 @@ but there're unused notes and time`, () => {
     assert.strictEqual(result, rightResult);
   });
 
-  it(`Ran out of notes`, () => {
+  it(`Should give a message if player ran out of notes`, () => {
     const otherPlayersResults = [10, 15];
 
     const playerResult = {
