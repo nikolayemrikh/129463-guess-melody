@@ -14,7 +14,7 @@ Message should be in second plural form`, () => {
         };
 
         const result = getResultMessage(playerResult, otherPlayersResults);
-        const rightResult = `Вы заняли 1-ое место из 3 игроков. \
+        const rightResult = `Вы заняли 1 место из 3 игроков. \
 Это лучше, чем у 67% игроков`;
         assert.strictEqual(result, rightResult);
       });
@@ -31,7 +31,7 @@ Message should be in second plural form`, () => {
     };
 
     const result = getResultMessage(playerResult, otherPlayersResults);
-    const rightResult = `Вы заняли 1-ое место из 21 игрока. \
+    const rightResult = `Вы заняли 1 место из 21 игрока. \
 Это лучше, чем у 95% игроков`;
     assert.strictEqual(result, rightResult);
   });
@@ -47,7 +47,7 @@ Message should be in second plural form`, () => {
     };
 
     const result = getResultMessage(playerResult, otherPlayersResults);
-    const rightResult = `Вы заняли 1-ое место из 3 игроков. \
+    const rightResult = `Вы заняли 1 место из 3 игроков. \
 Это лучше, чем у 67% игроков`;
     assert.strictEqual(result, rightResult);
   });
@@ -63,7 +63,7 @@ Message should be in second plural form`, () => {
     };
 
     const result = getResultMessage(playerResult, otherPlayersResults);
-    const rightResult = `Вы заняли 3-ое место из 3 игроков.`;
+    const rightResult = `Вы заняли 3 место из 3 игроков.`;
     assert.strictEqual(result, rightResult);
   });
 
@@ -78,7 +78,7 @@ Message should be in second plural form`, () => {
     };
 
     const result = getResultMessage(playerResult, otherPlayersResults);
-    const rightResult = `Вы заняли 1-ое место из 3 игроков. \
+    const rightResult = `Вы заняли 1 место из 3 игроков. \
 Это лучше, чем у 67% игроков`;
     assert.strictEqual(result, rightResult);
   });
@@ -94,7 +94,7 @@ Message should be in second plural form`, () => {
     };
 
     const result = getResultMessage(playerResult, otherPlayersResults);
-    const rightResult = `Вы заняли 2-ое место из 4 игроков. \
+    const rightResult = `Вы заняли 2 место из 4 игроков. \
 Это лучше, чем у 50% игроков`;
     assert.strictEqual(result, rightResult);
   });
@@ -110,7 +110,7 @@ Message should be in second plural form`, () => {
     };
 
     const result = getResultMessage(playerResult, otherPlayersResults);
-    const rightResult = `Вы, как единственный сыгравший, заняли 1-ое место.`;
+    const rightResult = `Вы, как единственный сыгравший, заняли 1 место.`;
     assert.strictEqual(result, rightResult);
   });
 

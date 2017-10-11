@@ -32,7 +32,7 @@ export default (playerResult, otherPlayersResults) => {
     return `\
 Вы\
 ${otherPlayersResults.length === 1 ? `, как единственный сыгравший,` : ``} \
-заняли ${positionNumber}-ое место\
+заняли ${positionNumber} место\
 ${otherPlayersResults.length !== 1 ? ` из ${otherPlayersResults.length} ${playerPluralForm}` : ``}.\
 ${otherPlayersResults.length - positionNumber !== 0 ? ` Это лучше, чем у ${percent}% ${percentPluralForm}` : ``}`;
   }

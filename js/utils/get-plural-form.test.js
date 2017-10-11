@@ -2,7 +2,7 @@ import assert from 'assert';
 import handleThrow from './handle-assert-throw';
 import getPluralForm from './get-plural-form';
 
-const titles = [`минута`, `минуты`, `минут`];
+const forms = [`минута`, `минуты`, `минут`];
 
 const firstForm = [
   1, 21, 31, 41, 51, 61, 71, 81, 91, 101, 121, 131, 141, 151, 161, 171, 181,
@@ -26,7 +26,7 @@ describe(`pluralForm()`, () => {
 which ends with 1 excluding numbers which ends with 11`, () => {
         const rightResult = `минута`;
         firstForm.forEach((num) => {
-          assert.strictEqual(getPluralForm(num, titles), rightResult, num);
+          assert.strictEqual(getPluralForm(num, forms), rightResult, num);
         });
       });
 
@@ -34,24 +34,24 @@ which ends with 1 excluding numbers which ends with 11`, () => {
 which ends with 2 — 4 excluding numbers which ends with 12 — 14`, () => {
         const rightResult = `минуты`;
         secondForm.forEach((num) => {
-          assert.strictEqual(getPluralForm(num, titles), rightResult, num);
+          assert.strictEqual(getPluralForm(num, forms), rightResult, num);
         });
       });
 
   it(`should give right result with other numbers`, () => {
     const rightResult = `минут`;
     lastForm.forEach((num) => {
-      assert.strictEqual(getPluralForm(num, titles), rightResult, num);
+      assert.strictEqual(getPluralForm(num, forms), rightResult, num);
     });
   });
 
   it(`shouldn't give same result as numbers which ends with 1 excluding 11`, () => {
     const rightResult = `минута`;
     secondForm.forEach((num) => {
-      assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+      assert.notStrictEqual(getPluralForm(num, forms), rightResult, num);
     });
     lastForm.forEach((num) => {
-      assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+      assert.notStrictEqual(getPluralForm(num, forms), rightResult, num);
     });
   });
 
@@ -59,20 +59,20 @@ which ends with 2 — 4 excluding numbers which ends with 12 — 14`, () => {
 excluding 12 — 14`, () => {
         const rightResult = `минуты`;
         firstForm.forEach((num) => {
-          assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+          assert.notStrictEqual(getPluralForm(num, forms), rightResult, num);
         });
         lastForm.forEach((num) => {
-          assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+          assert.notStrictEqual(getPluralForm(num, forms), rightResult, num);
         });
       });
 
   it(`shouldn't give same result as other numbers`, () => {
     const rightResult = `минут`;
     firstForm.forEach((num) => {
-      assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+      assert.notStrictEqual(getPluralForm(num, forms), rightResult, num);
     });
     secondForm.forEach((num) => {
-      assert.notStrictEqual(getPluralForm(num, titles), rightResult, num);
+      assert.notStrictEqual(getPluralForm(num, forms), rightResult, num);
     });
   });
 
@@ -98,8 +98,8 @@ excluding 12 — 14`, () => {
     handleThrow(getPluralForm, [1, NaN], expectedArrayMsg);
   });
 
-  it(`should throw an error if elements in titles array are not of type string`, () => {
-    const expectedMsg = `Elements in array of titles must be a strings`;
+  it(`should throw an error if elements in forms array are not of type string`, () => {
+    const expectedMsg = `Elements in array of forms must be a strings`;
     handleThrow(getPluralForm, [1, [1, 2, 3]], expectedMsg);
     handleThrow(getPluralForm, [1, [[], `k`, {}]], expectedMsg);
     handleThrow(getPluralForm, [1, [null, `минуты`, `минут`]], expectedMsg);
