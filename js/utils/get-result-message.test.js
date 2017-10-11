@@ -37,6 +37,53 @@ Message should be in second plural form`, () => {
   });
 
   it(`Should give top position between players with same score`, () => {
+    const otherPlayersResults = [15, 15];
+
+    const playerResult = {
+      isWin: true,
+      score: 15,
+      remainingTimeInSec: 20,
+      remainingNotes: 2
+    };
+
+    const result = getResultMessage(playerResult, otherPlayersResults);
+    const rightResult = `Вы заняли 1-ое место из 3 игроков. \
+Это лучше, чем у 67% игроков`;
+    assert.strictEqual(result, rightResult);
+  });
+
+  it(`Should give low position if there're several players with same higher score`, () => {
+    const otherPlayersResults = [15, 15];
+
+    const playerResult = {
+      isWin: true,
+      score: 14,
+      remainingTimeInSec: 20,
+      remainingNotes: 2
+    };
+
+    const result = getResultMessage(playerResult, otherPlayersResults);
+    const rightResult = `Вы заняли 3-ое место из 3 игроков.`;
+    assert.strictEqual(result, rightResult);
+  });
+
+  it(`Should give tow position if there're several players with same lower score`, () => {
+    const otherPlayersResults = [15, 15];
+
+    const playerResult = {
+      isWin: true,
+      score: 16,
+      remainingTimeInSec: 20,
+      remainingNotes: 2
+    };
+
+    const result = getResultMessage(playerResult, otherPlayersResults);
+    const rightResult = `Вы заняли 1-ое место из 3 игроков. \
+Это лучше, чем у 67% игроков`;
+    assert.strictEqual(result, rightResult);
+  });
+
+  it(`Should give top position between players with same score and one with lower`, () => {
     const otherPlayersResults = [17, 15, 15];
 
     const playerResult = {

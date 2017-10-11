@@ -34,6 +34,6 @@ export default (playerResult, otherPlayersResults) => {
 ${otherPlayersResults.length === 1 ? `, как единственный сыгравший,` : ``} \
 заняли ${positionNumber}-ое место\
 ${otherPlayersResults.length !== 1 ? ` из ${otherPlayersResults.length} ${playerPluralForm}` : ``}.\
-${otherPlayersResults.length !== 1 ? ` Это лучше, чем у ${percent}% ${percentPluralForm}` : ``}`;
+${otherPlayersResults.length - positionNumber !== 0 ? ` Это лучше, чем у ${percent}% ${percentPluralForm}` : ``}`;
   }
 };
