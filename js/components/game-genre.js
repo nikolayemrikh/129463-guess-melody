@@ -14,7 +14,7 @@ export default ({tracks, rightAnswerIndexes}) => {
       <div class="genre-answer">
         <div class="player-wrapper">
           <div class="player">
-            <audio></audio>
+            <audio src="${track.src}"></audio>
             <button class="player-control player-control--pause"></button>
             <div class="player-track">
               <span class="player-status"></span>

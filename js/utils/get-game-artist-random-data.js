@@ -10,12 +10,12 @@ export default () => {
     return tmpTracks.splice(index, 1)[0];
   });
 
-  const correctArtist = currentTracks[
+  const correctAnswer = currentTracks[
       Math.floor(Math.random() * currentTracks.length)
-  ].artist;
+  ];
 
   return {
-    correctAnswer: correctArtist,
+    correctAnswer,
     tracks: currentTracks
   };
 };

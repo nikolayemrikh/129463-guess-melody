@@ -11,7 +11,7 @@ export default ({correctAnswer, tracks}) => {
     <h2 class="title main-title">Кто исполняет эту песню?</h2>
     <div class="player-wrapper">
       <div class="player">
-        <audio></audio>
+        <audio src="${correctAnswer.src}" autoplay></audio>
         <button class="player-control player-control--pause"></button>
         <div class="player-track">
           <span class="player-status"></span>
@@ -33,13 +33,25 @@ export default ({correctAnswer, tracks}) => {
   const wrapperEl = getElement(wrapperTpl);
   wrapperEl.appendChild(stateEl);
   wrapperEl.appendChild(getElement(template));
+  const audioEl = wrapperEl.querySelector(`.player audio`);
+  wrapperEl.querySelector(`.player-control`).addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    const btn = evt.target;
+    btn.classList.toggle(`player-control--pause`);
+    btn.classList.toggle(`player-control--play`);
+    if (audioEl.paused) {
+      audioEl.play();
+    } else {
+      audioEl.pause();
+    }
+  });
   wrapperEl.querySelector(`.main-list`).addEventListener(`change`, (evt) => {
     const userAnswer = evt.target.value;
     const ans = {
       timeInSec: 35,
       userAnswer
     };
-    if (userAnswer !== correctAnswer) {
+    if (userAnswer !== correctAnswer.artist) {
       state.mistakesCnt++;
       ans.isCorrectAnswer = false;
     } else {
