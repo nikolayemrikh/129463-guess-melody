@@ -12,7 +12,7 @@ const template = `<section class="main main--result">
 
 const el = getElement(template);
 el.querySelector(`.main-replay`).addEventListener(`click`, () => {
-  show(greeting);
+  show(greeting());
 });
 
 export default el;

@@ -1,26 +1,13 @@
 import getElement from '../utils/get-element';
-import show from '../utils/show';
-import gameGenre from './game-genre';
+import getStateEl from './state';
+import updateRoute from '../utils/router';
+import state from '../state';
 
-const template = `<section class="main main--level main--level-artist">
-  <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
-    <circle
-      cx="390" cy="390" r="370"
-      class="timer-line"
-      style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
+const wrapperTpl = `<section class="main main--level main--level-artist"></section>`;
 
-    <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
-      <span class="timer-value-mins">05</span><!--
-      --><span class="timer-value-dots">:</span><!--
-      --><span class="timer-value-secs">00</span>
-    </div>
-  </svg>
-  <div class="main-mistakes">
-    <img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">
-    <img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">
-  </div>
-
-  <div class="main-wrap">
+export default ({correctAnswer, tracks}) => {
+  const stateEl = getStateEl(state);
+  const template = `<div class="main-wrap">
     <h2 class="title main-title">Кто исполняет эту песню?</h2>
     <div class="player-wrapper">
       <div class="player">
@@ -32,40 +19,35 @@ const template = `<section class="main main--level main--level-artist">
       </div>
     </div>
     <form class="main-list">
-      <div class="main-answer-wrapper">
-        <input class="main-answer-r" type="radio" id="answer-1" name="answer" value="val-1"/>
-        <label class="main-answer" for="answer-1">
-          <img class="main-answer-preview" src="http://placehold.it/134x134"
-               alt="Пелагея" width="134" height="134">
-          Пелагея
-        </label>
-      </div>
-
-      <div class="main-answer-wrapper">
-        <input class="main-answer-r" type="radio" id="answer-2" name="answer" value="val-2"/>
-        <label class="main-answer" for="answer-2">
-          <img class="main-answer-preview" src="http://placehold.it/134x134"
-               alt="Краснознаменная дивизия имени моей бабушки" width="134" height="134">
-          Краснознаменная дивизия имени моей бабушки
-        </label>
-      </div>
-
-      <div class="main-answer-wrapper">
-        <input class="main-answer-r" type="radio" id="answer-3" name="answer" value="val-3"/>
-        <label class="main-answer" for="answer-3">
-          <img class="main-answer-preview" src="http://placehold.it/134x134"
-               alt="Lorde" width="134" height="134">
-          Lorde
-        </label>
-      </div>
+    ${tracks.map((track, i) => `
+      <div class="main-answer-wrapper">\
+        <input class="main-answer-r" type="radio" id="answer-${i}" name="answer" value="${track.artist}"/>\
+        <label class="main-answer" for="answer-${i}">\
+          <img class="main-answer-preview" src="${track.image}"\
+               alt="${track.artist}" width="134" height="134">\
+          ${track.artist}\
+        </label>\
+      </div>`).join(``)}
     </form>
-  </div>
-</section>`;
-
-const el = getElement(template);
-el.querySelector(`.main-list`).addEventListener(`change`, (evt) => {
-  show(gameGenre);
-  evt.target.checked = false;
-});
-
-export default el;
+  </div>`;
+  const wrapperEl = getElement(wrapperTpl);
+  wrapperEl.appendChild(stateEl);
+  wrapperEl.appendChild(getElement(template));
+  wrapperEl.querySelector(`.main-list`).addEventListener(`change`, (evt) => {
+    const userAnswer = evt.target.value;
+    const ans = {
+      timeInSec: 35,
+      userAnswer
+    };
+    if (userAnswer !== correctAnswer) {
+      state.mistakesCnt++;
+      ans.isCorrectAnswer = false;
+    } else {
+      ans.isCorrectAnswer = true;
+    }
+    state.answers.push(ans);
+    updateRoute();
+    evt.target.checked = false;
+  });
+  return wrapperEl;
+};
