@@ -15,7 +15,7 @@ export default ({tracks, rightAnswerIndexes}) => {
         <div class="player-wrapper">
           <div class="player">
             <audio src="${track.src}"></audio>
-            <button class="player-control player-control--pause"></button>
+            <button class="player-control player-control--play"></button>
             <div class="player-track">
               <span class="player-status"></span>
             </div>
@@ -32,9 +32,23 @@ export default ({tracks, rightAnswerIndexes}) => {
   const wrapperEl = getElement(wrapperTpl);
 
   wrapperEl.appendChild(stateEl);
-  const el = getElement(template);
-  wrapperEl.appendChild(el);
-  const form = el.querySelector(`.genre`);
+  wrapperEl.appendChild(getElement(template));
+  wrapperEl.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    const btn = evt.target;
+    if (btn.classList.contains(`player-control`)) {
+      const playerEl = btn.closest(`.player`);
+      const closestAudioEl = playerEl.querySelector(`audio`);
+      btn.classList.toggle(`player-control--pause`);
+      btn.classList.toggle(`player-control--play`);
+      if (closestAudioEl.paused) {
+        closestAudioEl.play();
+      } else {
+        closestAudioEl.pause();
+      }
+    }
+  });
+  const form = wrapperEl.querySelector(`.genre`);
   const answerCheckboxes = [...form.answer];
   const submitBtn = form.querySelector(`.genre-answer-send`);
   submitBtn.disabled = true;
