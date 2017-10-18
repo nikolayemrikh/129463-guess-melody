@@ -10,9 +10,10 @@ const template = `<section class="main main--result">
   <span role="button" tabindex="0" class="main-replay">Попробовать ещё раз</span>
 </section>`;
 
-const el = getElement(template);
-el.querySelector(`.main-replay`).addEventListener(`click`, () => {
-  show(greeting);
-});
-
-export default el;
+export default () => {
+  const el = getElement(template);
+  el.querySelector(`.main-replay`).addEventListener(`click`, () => {
+    show(greeting());
+  });
+  return el;
+};

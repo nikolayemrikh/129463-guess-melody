@@ -1,4 +1,8 @@
 import show from './utils/show';
-import greeting from './components/greeting';
+import getGreetingEl from './components/greeting';
+import initGame from './utils/initialize-game';
 
-show(greeting);
+initGame();
+
+const greetingEl = getGreetingEl();
+show(greetingEl);

@@ -1,6 +1,6 @@
 import getElement from '../utils/get-element';
-import show from '../utils/show';
-import gameArtist from './game-artist';
+import updateRoute from '../utils/router';
+import initGame from '../utils/initialize-game';
 
 const template = `<section class="main main--welcome">
   <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
@@ -13,9 +13,11 @@ const template = `<section class="main main--welcome">
   </p>
 </section>`;
 
-const el = getElement(template);
-el.querySelector(`.main-play`).addEventListener(`click`, () => {
-  show(gameArtist);
-});
-
-export default el;
+export default () => {
+  const el = getElement(template);
+  el.querySelector(`.main-play`).addEventListener(`click`, () => {
+    initGame();
+    updateRoute();
+  });
+  return el;
+};

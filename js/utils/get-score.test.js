@@ -23,6 +23,7 @@ if invoked with 10 answers and 0 - 3 remaining notes`, () => {
           const answers = [];
           for (let i = 0; i < 10; i++) { // 10 ответов
             answers[i] = {
+              isCorrectAnswer: true,
               timeInSec: Math.floor(Math.random() * 45) // время от 0 до 45
             };
           }
@@ -36,6 +37,7 @@ if invoked with 10 answers and 0 - 3 remaining notes`, () => {
     const answers = [];
     for (let i = 0; i < 9; i++) {
       answers[i] = {
+        isCorrectAnswer: true,
         timeInSec: Math.floor(Math.random() * 45)
       };
     }
@@ -44,6 +46,7 @@ if invoked with 10 answers and 0 - 3 remaining notes`, () => {
 
     for (let i = 9; i < 12; i++) {
       answers[i] = {
+        isCorrectAnswer: true,
         timeInSec: Math.floor(Math.random() * 45)
       };
     }
@@ -55,6 +58,7 @@ if invoked with 10 answers and 0 - 3 remaining notes`, () => {
     const answers = [];
     for (let i = 0; i < 10; i++) {
       answers[i] = {
+        isCorrectAnswer: true,
         timeInSec: Math.floor(Math.random() * 45)
       };
     }
@@ -68,6 +72,7 @@ if invoked with 10 answers and 0 - 3 remaining notes`, () => {
     const answers = [];
     for (let i = 0; i < 10; i++) {
       answers[i] = {
+        isCorrectAnswer: true,
         timeInSec: Math.floor(Math.random() * 45)
       };
     }
@@ -105,6 +110,7 @@ and 3 remaining notes`, () => {
         const answers = [];
         for (let i = 0; i < 10; i++) {
           answers[i] = {
+            isCorrectAnswer: true,
             timeInSec: Math.floor(Math.random() * (50 - 30) + 30) // время от 30 до 50
           };
         }
@@ -117,6 +123,7 @@ and 3 remaining notes`, () => {
         const answers = [];
         for (let i = 0; i < 10; i++) {
           answers[i] = {
+            isCorrectAnswer: true,
             timeInSec: Math.floor(Math.random() * 29) // время от 0 до 29
           };
         }
@@ -129,6 +136,7 @@ and 1 remaining note`, () => {
         const answers = [];
         for (let i = 0; i < 10; i++) {
           answers[i] = {
+            isCorrectAnswer: true,
             timeInSec: Math.floor(Math.random() * 29) // время от 0 до 29
           };
         }
@@ -141,11 +149,13 @@ and 2 remaining note`, () => {
         const answers = [];
         for (let i = 0; i < 8; i++) { // 8 быстрых
           answers[i] = {
+            isCorrectAnswer: true,
             timeInSec: Math.floor(Math.random() * 29) // время от 0 до 29
           };
         }
         for (let i = 8; i < 10; i++) { // 2 медленных
           answers[i] = {
+            isCorrectAnswer: true,
             timeInSec: Math.floor(Math.random() * (45 - 30) + 30) // время от 30 до 45
           };
         }
