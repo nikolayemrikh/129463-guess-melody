@@ -1,0 +1,25 @@
+import getElement from '../utils/get-element';
+
+export default class AbstractView {
+  constructor() {}
+
+  /**
+   * @abstract
+   * @return {string}
+   */
+  get template() {}
+
+  get element() {
+    if (!this._el) {
+      this._el = this.render();
+      this.bind(this._el);
+    }
+    return this._el;
+  }
+
+  render() {
+    return getElement(this.template);
+  }
+
+  bind() {}
+}

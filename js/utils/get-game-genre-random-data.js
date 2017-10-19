@@ -14,17 +14,19 @@ export default () => {
       Math.floor(Math.random() * currentTracks.length)
   ].genre;
 
-  const rightAnswerIndexes = [];
+  const correctAnswerIndexes = [];
 
   currentTracks.forEach((el, i) => {
     if (currentTracks[i].genre === genre) {
-      rightAnswerIndexes.push(i);
+      correctAnswerIndexes.push(i);
     }
   });
 
   return {
-    genre,
     tracks: currentTracks,
-    rightAnswerIndexes
+    correctAnswer: {
+      genre,
+      indexes: correctAnswerIndexes
+    }
   };
 };

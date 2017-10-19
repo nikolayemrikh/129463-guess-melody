@@ -1,16 +1,18 @@
 import config from '../config';
 import state from '../state';
+import Timer from './timer';
+import router from './router';
 import getGameArtistData from './get-game-artist-random-data';
 import getGameGenreData from './get-game-genre-random-data';
 
 export default () => {
   Object.assign(state, {
-    timeInSec: config.maxTimeInSec,
     mistakesCnt: 0,
     remainingNotes: config.maxMistakesCount - 0,
     answers: [],
     questions: [],
-    currentQuestionIndex: 0
+    currentQuestionIndex: 0,
+    timer: new Timer(config.maxTimeInSec)
   });
 
   const questionsLength = config.maxGameRounds;
@@ -27,4 +29,11 @@ export default () => {
       type: `genre`
     }));
   }
+
+  state.interval = setInterval(() => {
+    const isDone = state.timer.tick();
+    if (isDone) {
+      router.updateRoute();
+    }
+  }, 1000);
 };
