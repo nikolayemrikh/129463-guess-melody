@@ -10,7 +10,7 @@ import resultAttemptsOver from '../components/result-attempts-over';
 
 const updateRoute = () => {
   state.remainingNotes = config.maxMistakesCount - state.mistakesCnt;
-  if (state.mistakesCnt === 4) {
+  if (state.mistakesCnt === config.maxMistakesCount) {
     clearInterval(state.interval);
     return show(resultAttemptsOver().element);
   } else if (state.timer.remainingTime === 0) {

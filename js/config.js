@@ -1,5 +1,5 @@
 export default {
-  maxMistakesCount: 3,
+  maxMistakesCount: 4,
   maxGameRounds: 10,
   maxTimeInSec: 5 * 60,
   maxTracksArtist: 3,
