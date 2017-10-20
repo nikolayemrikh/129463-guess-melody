@@ -8,7 +8,7 @@ import getGameGenreData from './get-game-genre-random-data';
 export default () => {
   Object.assign(state, {
     mistakesCnt: 0,
-    remainingNotes: config.maxMistakesCount - 0,
+    remainingNotes: config.maxMistakesCount - 1,
     answers: [],
     questions: [],
     currentQuestionIndex: 0,
