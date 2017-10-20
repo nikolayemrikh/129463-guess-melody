@@ -1,3 +1,5 @@
+import config from '../config';
+import getRadius from '../utils/get-radius';
 import AbstractView from './abstract';
 import state from '../state';
 
@@ -32,7 +34,21 @@ export default class StateView extends AbstractView {
   bind() {
     state.timer.addTickListener(() => {
       this.updateTimeText(state.timer.remainingTime);
+      this.updateStroke(state.timer.remainingTime);
     });
+  }
+
+  updateStroke(remainingTime) {
+    if (!this._circleEl) {
+      this._circleEl = this.element.querySelector(`circle`);
+      this._circleRadius = this._circleEl.getAttribute(`r`);
+      this._circleLength = 2 * Math.PI * this._circleRadius;
+      this._circleEl.setAttribute(`stroke-dasharray`, this._circleLength);
+    }
+    const pastTime = config.maxTimeInSec - remainingTime;
+    const ratio = pastTime / config.maxTimeInSec;
+    const {offset} = getRadius(ratio, this._circleRadius);
+    this._circleEl.setAttribute(`stroke-dashoffset`, this._circleLength - offset);
   }
 
   updateTimeText(remainingTime) {
