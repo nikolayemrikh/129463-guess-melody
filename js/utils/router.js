@@ -1,12 +1,14 @@
 import config from '../config';
 import state from '../state';
+import Timer from './timer';
 import show from './show';
-import initGame from '../utils/initialize-game';
 import gameArtist from '../components/game-artist';
 import gameGenre from '../components/game-genre';
 import resultWin from '../components/result-win';
 import resultTimeOver from '../components/result-time-over';
 import resultAttemptsOver from '../components/result-attempts-over';
+import getGameArtistData from './get-game-artist-random-data';
+import getGameGenreData from './get-game-genre-random-data';
 
 const updateRoute = () => {
   state.remainingNotes = config.maxMistakesCount - 1 - state.mistakesCnt;
@@ -32,6 +34,39 @@ const updateRoute = () => {
       break;
   }
   return show(currentGame(state.questions[nextQuestionIndex]).element);
+};
+
+const initGame = () => {
+  Object.assign(state, {
+    mistakesCnt: 0,
+    remainingNotes: config.maxMistakesCount - 1,
+    answers: [],
+    questions: [],
+    currentQuestionIndex: 0,
+    timer: new Timer(config.maxTimeInSec)
+  });
+
+  const questionsLength = config.maxGameRounds;
+  const gameArtistLength = questionsLength / 2;
+  const gameGenreLength = questionsLength / 2;
+
+  for (let i = 0; i < gameArtistLength; i++) {
+    state.questions.push(Object.assign(getGameArtistData(), {
+      type: `artist`
+    }));
+  }
+  for (let i = 0; i < gameGenreLength; i++) {
+    state.questions.push(Object.assign(getGameGenreData(), {
+      type: `genre`
+    }));
+  }
+
+  state.interval = setInterval(() => {
+    const isDone = state.timer.tick();
+    if (isDone) {
+      updateRoute();
+    }
+  }, 1000);
 };
 
 const startNewGame = () => {

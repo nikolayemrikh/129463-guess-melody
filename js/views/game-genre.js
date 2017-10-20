@@ -5,32 +5,6 @@ import getElement from '../utils/get-element';
 export default class GameGenreView extends AbstractView {
   constructor({correctAnswer, tracks}) {
     super();
-    if (!(correctAnswer instanceof Object) ||
-      typeof correctAnswer.genre !== `string` ||
-      !(correctAnswer.indexes instanceof Array) ||
-      !correctAnswer.indexes.every((i) => typeof i === `number`)) {
-      throw new Error(`Correct answer obj must have properties \
-genre and array of indexes`);
-    }
-
-    const props = [`src`, `genre`];
-
-    if (tracks instanceof Array) {
-      const isCorrectObjects = tracks.every((track) => {
-        for (let prop of props) {
-          if (!track.hasOwnProperty(prop) || typeof track[prop] !== `string`) {
-            return false;
-          }
-        }
-        return true;
-      });
-      if (!isCorrectObjects) {
-        throw new Error(`Correct track objects must have properties \
-          src, artist and image of type string`);
-      }
-    } else {
-      throw new TypeError(`Second argument is not instance of Array`);
-    }
     this.tracks = tracks;
     this.correctAnswer = correctAnswer;
   }
