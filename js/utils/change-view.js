@@ -1,9 +1,9 @@
 const app = document.querySelector(`.app`);
 
-export default (el) => {
+export default (view) => {
   const main = app.querySelector(`.main`);
   if (main && main.parentElement === app) {
     app.removeChild(main);
-    app.appendChild(el);
+    app.appendChild(view.element);
   }
 };

@@ -1,4 +1,4 @@
-import getElement from '../utils/get-element';
+import {getElement} from './utils';
 
 export default class AbstractView {
   constructor() {}
