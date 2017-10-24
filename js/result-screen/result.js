@@ -3,9 +3,6 @@ import ResultView from './result-view';
 import changeView from '../utils/change-view';
 
 class ResultScreen {
-  constructor() {
-  }
-
   init(gameResult) {
     this._gameResult = gameResult;
     this._view = new ResultView(this._gameResult);

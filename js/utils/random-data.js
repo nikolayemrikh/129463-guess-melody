@@ -2,25 +2,17 @@ import config from '../config';
 import trackList from '../data/tracks';
 
 /**
- * Линейный конгруэнтный генератор
+ * Генератор равномерно распределенной СВ на интервале [0, 1]
  * Нужен, чтобы создавать псевдорандомную посл-ть данных,
  * которая не будет меняться с течением времени
  * @param {number} seed — начальное значение
  * @param {number} m — модуль
  * @param {number} a — множитель
 */
-const linMultGen = function* (seed, m, a) {
+const uniDistrGen = function* (seed = 1, m = Math.pow(2, 31) - 1, a = 48271) {
   let val = seed;
   for (;;) {
     val = (a * val) % m;
-    yield val;
-  }
-};
-
-const uniDistrGen = function* (seed = 1, m = Math.pow(2, 31) - 1, a = 48271) {
-  const lmg = linMultGen(seed, m, a);
-  for (;;) {
-    const val = lmg.next().value;
     yield val / m;
   }
 };

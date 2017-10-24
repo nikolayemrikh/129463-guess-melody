@@ -5,11 +5,7 @@ import config from '../config';
 
 class GreetingScreen {
   constructor() {
-    const state = {
-      time: config.maxTimeInSec,
-      maxMistakesCount: config.maxMistakesCount - 1
-    };
-    this._view = new GreetingView(state);
+    this._view = new GreetingView();
   }
 
   init() {

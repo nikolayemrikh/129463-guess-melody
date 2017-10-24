@@ -8,59 +8,71 @@ import resultScreen from './result-screen/result';
 // #result?{"status": "attempts-over"}
 // #result?{"status": "win", "score"; 17, "winInSeconds": 68, "fastAnswersCount": 7, "mistakesCnt": 2}
 
+const ScreenHash = {
+  GREETING: ``,
+  GAME: `game`,
+  RESULT: `result`
+};
+
 export default class App {
   static init() {
     const hashChangeHandler = () => {
-      if (!location.hash) {
-        this.showGreeting();
-        return;
-      }
       const hashValue = location.hash.replace(`#`, ``);
       const [hash, json] = hashValue.split(`?`);
-      try {
-        const obj = JSON.parse(json);
-        switch (hash) {
-          case `game`:
-            const answers = obj.answers;
-            if (!(answers instanceof Array)) {
-              throw new TypeError(`No answers or wrong type`);
-            }
-            const correctArray = answers.every((ans) => {
-              return ans.hasOwnProperty(`isCorrectAnswer`) && ans.hasOwnProperty(`timeInSec`);
-            });
-            if (!correctArray) {
-              throw new Error(`Array has wrong data`);
-            }
-            this.showGame(answers);
-            break;
-          case `result`:
-            this.showResult(obj);
-            break;
-        }
-      } catch (err) {
-        switch (hash) {
-          case `game`:
-            this.showGame();
-            break;
-          case `result`:
-            this.showGreeting();
-            break;
-        }
-      }
+      this.changeScreen(hash, json);
     };
     window.onhashchange = hashChangeHandler;
     hashChangeHandler();
   }
 
-  static showGreeting() {
-    greetingScreen.init();
+  static changeScreen(hash, json) {
+    if (hash === ScreenHash.GREETING) {
+      greetingScreen.init();
+      return;
+    }
+    switch (hash) {
+      case ScreenHash.GAME:
+        try {
+          const obj = JSON.parse(json);
+          const answers = obj.answers;
+          if (!(answers instanceof Array)) {
+            throw new TypeError(`No answers or wrong type`);
+          }
+          const correctArray = answers.every((ans) => {
+            return ans.hasOwnProperty(`isCorrectAnswer`) && ans.hasOwnProperty(`timeInSec`);
+          });
+          if (!correctArray) {
+            throw new Error(`Array has wrong data`);
+          }
+          gameScreen.init(answers);
+        } catch (err) {
+          gameScreen.init();
+        }
+        break;
+      case ScreenHash.RESULT:
+        try {
+          const gameResult = JSON.parse(json);
+          resultScreen.init(gameResult);
+        } catch (err) {
+          this.showGreeting();
+        }
+        break;
+    }
   }
 
-  static showGame(answers) {
-    gameScreen.init(answers);
+  static showGreeting() {
+    location.hash = ScreenHash.GREETING;
+  }
+
+  static showGame(answers = []) {
+    location.hash = `${ScreenHash.GAME}?${JSON.stringify({answers})}`;
+  }
+
+  static updateGameHash(answers) {
+    history.pushState(null, null, `#${ScreenHash.GAME}?${JSON.stringify({answers})}`);
   }
 
   static showResult(gameResult) {
-    resultScreen.init(gameResult);
+    location.hash = `${ScreenHash.RESULT}?${JSON.stringify(gameResult)}`;
   }
 }

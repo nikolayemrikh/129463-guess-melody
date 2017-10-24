@@ -2,6 +2,11 @@ import config from '../config';
 import AbstractView from '../abstract-view';
 import GameArtistView from './subviews/artist-view';
 import GameGenreView from './subviews/genre-view';
+import {getTimeStrFromNumber} from '../utils';
+import {GameType} from '../enums';
+
+const circleRadius = 370;
+const circleLength = 2 * Math.PI * circleRadius;
 
 export default class GameView extends AbstractView {
   constructor(model) {
@@ -13,14 +18,15 @@ export default class GameView extends AbstractView {
     return `<section class="main main--level main--level-${this._model.currentQuestion.type}"><div>
     <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
       <circle
-        cx="390" cy="390" r="370"
+        cx="390" cy="390" r="${circleRadius}"
+        stroke-dasharray="${circleLength}"
         class="timer-line"
         style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
 
       <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
-        <span class="timer-value-mins">${this._getTimeText().minutesStr}</span><!--
+        <span class="timer-value-mins"></span><!--
         --><span class="timer-value-dots">:</span><!--
-        --><span class="timer-value-secs">${this._getTimeText().secondsStr}</span>
+        --><span class="timer-value-secs"></span>
       </div>
     </svg>
     <div class="main-mistakes">${this._getMistakesMarkup(this._model.mistakesCnt)}</div>
@@ -35,6 +41,8 @@ export default class GameView extends AbstractView {
 
     this._timerValueMins = this.element.querySelector(`.timer-value-mins`);
     this._timerValueSecs = this.element.querySelector(`.timer-value-secs`);
+
+    this._circleEl = this.element.querySelector(`circle`);
   }
 
   _getMistakesMarkup() {
@@ -58,11 +66,11 @@ export default class GameView extends AbstractView {
       this._containerEl.removeChild(wrapEl);
     }
     switch (this._model.currentQuestion.type) {
-      case `artist`:
+      case GameType.ARTIST:
         this._subView = new GameArtistView(this._model.currentQuestion);
         this._subView.onSelectChange = this.onAnswer;
         break;
-      case `genre`:
+      case GameType.GENRE:
         this._subView = new GameGenreView(this._model.currentQuestion);
         this._subView.onSubmit = this.onAnswer;
         break;
@@ -70,43 +78,26 @@ export default class GameView extends AbstractView {
     this._containerEl.appendChild(this._subView.element);
   }
 
-  _getTimeText() {
-    const minutes = Math.floor(this._model.timer.remainingTime / 60);
-    let minutesStr = minutes.toString();
-    minutesStr = minutesStr.length === 1 ? `0` + minutesStr : minutesStr;
-    const seconds = this._model.timer.remainingTime - (minutes * 60);
-    let secondsStr = seconds.toString();
-    secondsStr = secondsStr.length === 1 ? `0` + secondsStr : secondsStr;
-    return {
-      minutesStr,
-      secondsStr
-    };
+  _getTimeText(remainingTime) {
+    const minutes = Math.floor(remainingTime / 60);
+    const seconds = remainingTime - (minutes * 60);
+    return [minutes, seconds].map((num) => getTimeStrFromNumber(num));
   }
 
-  updateTimer() {
-    this._updateStroke();
-    this._updateTimeText();
+  updateTimer(remainingTime) {
+    const offset = this._getStrokeOffset(remainingTime);
+    this._circleEl.setAttribute(`stroke-dashoffset`, circleLength - offset);
+    [
+      this._timerValueMins.textContent,
+      this._timerValueSecs.textContent
+    ] = this._getTimeText(remainingTime);
   }
 
-  _updateStroke() {
-    if (!this._circleEl) {
-      this._circleEl = this.element.querySelector(`circle`);
-      this._circleRadius = this._circleEl.getAttribute(`r`);
-      this._circleLength = 2 * Math.PI * this._circleRadius;
-      this._circleEl.setAttribute(`stroke-dasharray`, this._circleLength);
-    }
-    const pastTime = config.maxTimeInSec - this._model.timer.remainingTime;
+  _getStrokeOffset(remainingTime) {
+    const pastTime = config.maxTimeInSec - remainingTime;
     const ratio = pastTime / config.maxTimeInSec;
-    const circleLength = 2 * Math.PI * this._circleRadius;
 
-    const offset = Math.round(circleLength - circleLength * ratio);
-    this._circleEl.setAttribute(`stroke-dashoffset`, this._circleLength - offset);
-  }
-
-  _updateTimeText() {
-    const {minutesStr, secondsStr} = this._getTimeText();
-    this._timerValueMins.textContent = minutesStr;
-    this._timerValueSecs.textContent = secondsStr;
+    return Math.round(circleLength - circleLength * ratio);
   }
 
   onAnswer() {}
