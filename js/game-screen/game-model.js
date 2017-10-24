@@ -15,7 +15,7 @@ export default class GameModel {
   get mistakesCnt() {
     let cnt = 0;
     for (let ans of this.answers) {
-      if (!ans.isCorrectAnswer) {
+      if (!ans.isCorrect) {
         cnt++;
       }
     }

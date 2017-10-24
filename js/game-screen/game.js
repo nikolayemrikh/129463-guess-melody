@@ -39,17 +39,17 @@ class GameScreen {
   }
 
   onAnswer(ans) {
-    let isCorrectAnswer = false;
+    let isCorrect = false;
     switch (this._model.currentQuestion.type) {
       case GameType.ARTIST:
-        isCorrectAnswer = this._checkArtistAnswer(ans);
+        isCorrect = this._checkArtistAnswer(ans);
         break;
       case GameType.GENRE:
-        isCorrectAnswer = this._checkGenreAnswer(ans);
+        isCorrect = this._checkGenreAnswer(ans);
         break;
     }
 
-    if (!isCorrectAnswer) {
+    if (!isCorrect) {
       if (this._model.mistakesCnt === 4) {
         App.showResult({
           status: Status.ATTEMPTS_OVER
@@ -66,7 +66,7 @@ console.log(this._model.answers)
       App.updateGameHash(this._model.answers);
     } else {
       const fastAnswersCount = this._model.answers.filter((answ) => {
-        return answ.isCorrectAnswer && (answ.timeInSec <= config.fastAnswerTimeInSec);
+        return answ.isCorrect && (answ.timeInSec <= config.fastAnswerTimeInSec);
       }).length;
       App.showResult({
         status: Status.WIN,
@@ -89,7 +89,7 @@ console.log(this._model.answers)
       timeInSec: this._model.questionStartRemainingTime - this._timer.remainingTime,
       userAnswer: artistName
     };
-    ans.isCorrectAnswer = artistName !== this._model.currentQuestion.correctTrack.artist;
+    ans.isCorrect = artistName !== this._model.currentQuestion.correctTrack.artist;
     this._model.answers.push(ans);
   }
 
@@ -100,9 +100,9 @@ console.log(this._model.answers)
     };
 
     if (checkedTracksIndexes.length !== this._model.currentQuestion.correctAnswer.indexes.length) {
-      ans.isCorrectAnswer = false;
+      ans.isCorrect = false;
     } else {
-      ans.isCorrectAnswer = ans.checkedTracksIndexes.every((index) => {
+      ans.isCorrect = ans.checkedTracksIndexes.every((index) => {
         return this._model.currentQuestion.correctAnswer.indexes.indexOf(index) !== -1;
       });
     }

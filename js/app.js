@@ -2,7 +2,7 @@ import greetingScreen from './greeting-screen/greeting';
 import gameScreen from './game-screen/game';
 import resultScreen from './result-screen/result';
 
-// #game?{"answers": [{"timeInSec": 20, "isCorrectAnswer": false}]}
+// #game?{"answers": [{"timeInSec": 20, "isCorrect": false}]}
 //
 // #result?{"status": "time-over"}
 // #result?{"status": "attempts-over"}
@@ -39,7 +39,7 @@ export default class App {
             throw new TypeError(`No answers or wrong type`);
           }
           const correctArray = answers.every((ans) => {
-            return ans.hasOwnProperty(`isCorrectAnswer`) && ans.hasOwnProperty(`timeInSec`);
+            return ans.hasOwnProperty(`isCorrect`) && ans.hasOwnProperty(`timeInSec`);
           });
           if (!correctArray) {
             throw new Error(`Array has wrong data`);

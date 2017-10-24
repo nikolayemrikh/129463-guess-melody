@@ -14,7 +14,7 @@ export const getScore = (answers, remainingNotes) => {
   let sum = 0;
   for (let i = 0; i < answers.length; i++) {
     const ans = answers[i];
-    if (!ans.isCorrectAnswer) {
+    if (!ans.isCorrect) {
       continue;
     }
     sum++;
