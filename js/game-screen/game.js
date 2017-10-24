@@ -35,7 +35,7 @@ class GameScreen {
     changeView(this._view);
     this._view.updateTimer(this._timer.remainingTime);
     this._view.onAnswer = this.onAnswer.bind(this);
-    this._view.update();
+    this._view.updateSubViews();
   }
 
   onAnswer(ans) {
@@ -62,7 +62,7 @@ class GameScreen {
 console.log(this._model.answers)
     const hasNext = this._model.nextQuestion(this._timer.remainingTime);
     if (hasNext) {
-      this._view.update();
+      this._view.updateSubViews();
       App.updateGameHash(this._model.answers);
     } else {
       const fastAnswersCount = this._model.answers.filter((answ) => {
@@ -81,6 +81,7 @@ console.log(this._model.answers)
   _setTimer() {
     const maxTime = config.maxTimeInSec;
     let time = !this._model.answers.length ? maxTime : maxTime - this._model.answersSummaryTime;
+    console.log(time)
     this._timer = new Timer(time);
   }
 

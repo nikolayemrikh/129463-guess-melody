@@ -55,7 +55,7 @@ export default class GameView extends AbstractView {
     this._mistakesContainerEl.innerHTML = this._getMistakesMarkup(this._model.mistakesCnt);
   }
 
-  update() {
+  updateSubViews() {
     if (this._model.previousQuestion &&
       this._model.previousQuestion.type !== this._model.currentQuestion.type) {
       this.element.classList.toggle(`main--level-artist`);
