@@ -1,5 +1,4 @@
 import config from '../config';
-import Timer from '../utils/timer';
 
 export default class GameModel {
   constructor(questions) {
@@ -49,13 +48,8 @@ export default class GameModel {
 
   get answersSummaryTime() {
     let time = 0;
-    if (!this.answers.length) {
-      time = config.maxTimeInSec;
-    } else {
-      for (let ans of this.answers) {
-        time += ans.timeInSec;
-      }
-      time = config.maxTimeInSec - time;
+    for (let ans of this.answers) {
+      time += ans.timeInSec;
     }
     return time;
   }

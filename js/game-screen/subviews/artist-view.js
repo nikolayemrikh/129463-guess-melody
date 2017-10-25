@@ -1,10 +1,9 @@
 import AbstractView from '../../abstract-view';
 
 export default class GameArtistView extends AbstractView {
-  constructor({correctTrack, tracks}) {
+  constructor(model) {
     super();
-    this.correctTrack = correctTrack;
-    this.tracks = tracks;
+    this._model = model;
   }
 
   get template() {
@@ -12,7 +11,7 @@ export default class GameArtistView extends AbstractView {
   <h2 class="title main-title">Кто исполняет эту песню?</h2>
   <div class="player-wrapper">
     <div class="player">
-      <audio src="${this.correctTrack.src}" autoplay></audio>
+      <audio src="${this._model.currentQuestion.tracks.find((track) => track.isCorrect).src}" autoplay></audio>
       <button class="player-control player-control--pause"></button>
       <div class="player-track">
         <span class="player-status"></span>
@@ -20,7 +19,7 @@ export default class GameArtistView extends AbstractView {
     </div>
   </div>
   <form class="main-list">
-  ${this.tracks.map((track, i) => `
+  ${this._model.currentQuestion.tracks.map((track, i) => `
     <div class="main-answer-wrapper">\
       <input class="main-answer-r" type="radio" id="answer-${i}" name="answer" value="${track.artist}"/>\
       <label class="main-answer" for="answer-${i}">\
@@ -48,9 +47,14 @@ export default class GameArtistView extends AbstractView {
     });
     this.element.querySelector(`.main-list`).addEventListener(`change`, (evt) => {
       evt.preventDefault();
-      const userAnswer = evt.target.value;
-      this.onSelectChange(userAnswer);
+      const artistName = evt.target.value;
+      this.onSelectChange(this._checkAnswer(artistName));
     });
+  }
+
+  _checkAnswer(artistName) {
+    console.log(artistName === this._model.currentQuestion.tracks.find((track) => track.isCorrect).artist)
+    return artistName === this._model.currentQuestion.tracks.find((track) => track.isCorrect).artist;
   }
 
   onPlayerControlClick() {}

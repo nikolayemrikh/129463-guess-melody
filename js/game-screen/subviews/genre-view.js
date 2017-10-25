@@ -1,17 +1,16 @@
 import AbstractView from '../../abstract-view';
 
 export default class GameGenreView extends AbstractView {
-  constructor({correctAnswer, tracks}) {
+  constructor(model) {
     super();
-    this.tracks = tracks;
-    this.correctAnswer = correctAnswer;
+    this._model = model;
   }
 
   get template() {
     return `<div class="main-wrap">
   <h2 class="title">Выберите инди-рок треки</h2>
   <form class="genre">
-  ${this.tracks.map((track, i) => `
+  ${this._model.currentQuestion.tracks.map((track, i) => `
     <div class="genre-answer">
       <div class="player-wrapper">
         <div class="player">
@@ -64,7 +63,14 @@ export default class GameGenreView extends AbstractView {
         return checkbox.checked;
       }).map((elem) => Number.parseInt(elem.value, 10));
 
-      this.onSubmit(checkedTracksIndexes);
+      this.onSubmit(this._checkAnswer(checkedTracksIndexes));
+    });
+  }
+
+  _checkAnswer(checkedTracksIndexes) {
+    return this._model.currentQuestion.tracks.every((track, i) => {
+      const hasCheckedIndex = checkedTracksIndexes.indexOf(i) !== -1;
+      return track.isCorrect ? hasCheckedIndex : !hasCheckedIndex;
     });
   }
 

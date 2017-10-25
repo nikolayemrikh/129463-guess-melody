@@ -67,11 +67,11 @@ export default class GameView extends AbstractView {
     }
     switch (this._model.currentQuestion.type) {
       case GameType.ARTIST:
-        this._subView = new GameArtistView(this._model.currentQuestion);
+        this._subView = new GameArtistView(this._model);
         this._subView.onSelectChange = this.onAnswer;
         break;
       case GameType.GENRE:
-        this._subView = new GameGenreView(this._model.currentQuestion);
+        this._subView = new GameGenreView(this._model);
         this._subView.onSubmit = this.onAnswer;
         break;
     }

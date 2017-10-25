@@ -1,5 +1,6 @@
 import config from '../config';
-import trackList from '../data/tracks';
+import getTrackList from '../data/tracks.js';
+import {GameType} from '../enums';
 
 /**
  * Генератор равномерно распределенной СВ на интервале [0, 1]
@@ -17,72 +18,84 @@ const uniDistrGen = function* (seed = 1, m = Math.pow(2, 31) - 1, a = 48271) {
   }
 };
 
-const udg = uniDistrGen(1312412);
+const udg = uniDistrGen(10);
 
-const getRandomAtristData = (tracks, tracksListSize = config.maxTracksArtist) => {
-  const tmpTracks = tracks.slice();
-  const tmpTracksLength = tmpTracks.length;
-  const currentTracks = [];
+const markRandomCorrect = (tracks, type) => {
+  const typeValue = tracks[
+      Math.floor(udg.next().value * tracks.length)
+  ][type];
 
-  const uniqueArtistsLength = tracks.filter((el1, index) => {
-    return tracks.findIndex((el2) => el2.artist === el1.artist) === index;
-  }).length;
-
-  const pushedTracksArtists = [];
-  while (currentTracks.length !== tracksListSize) {
-    const index = Math.floor(udg.next().value * tmpTracksLength);
-    const track = tmpTracks[index];
-
-    if (pushedTracksArtists.length === uniqueArtistsLength) {
-      currentTracks.push(track);
-      continue;
-    }
-    if (pushedTracksArtists.indexOf(track.artist) !== -1) {
-      continue;
-    } else {
-      pushedTracksArtists.push(track.artist);
-      currentTracks.push(track);
-    }
-  }
-
-  const correctTrack = currentTracks[
-      Math.floor(udg.next().value * currentTracks.length)
-  ];
-  // console.log(correctTrack.artist)
-
-  return {
-    correctTrack,
-    tracks: currentTracks
-  };
+  tracks.forEach((el, i) => {
+    tracks[i].isCorrect = el[type] === typeValue;
+    el[type] === typeValue ? console.log(i, tracks[i][type]) : null;
+  });
+  return tracks;
 };
 
-const getRandomGenreData = (tracks, tracksListSize = config.maxTracksGenre) => {
+const getGenericData = (type, tracks, tracksListSize) => {
   const tmpTracks = tracks.slice();
-  const currentTracks = Array.from({length: tracksListSize}, () => {
-    const index = Math.floor(udg.next().value * tmpTracks.length);
-    return tmpTracks.splice(index, 1)[0];
-  });
+  // let tmpTracksLength = tmpTracks.length;
+  let currentTracks = [];
 
-  const genre = currentTracks[
-      Math.floor(udg.next().value * currentTracks.length)
-  ].genre;
+  const uniqueArtists = new Set(); // уникальные артисты
+  const uniqueArtistsTracks = new Map(); // соответствующие им треки
 
-  const correctAnswerIndexes = [];
+  for (let track of tmpTracks) {
+    uniqueArtists.add(track[type]);
+  }
 
-  currentTracks.forEach((el, i) => {
-    if (currentTracks[i].genre === genre) {
-      correctAnswerIndexes.push(i);
+  for (let artist of uniqueArtists) {
+    uniqueArtistsTracks.set(artist, []);
+  }
+
+  for (let track of tmpTracks) {
+    const arr = uniqueArtistsTracks.get(track[type]);
+    arr.push(track);
+  }
+
+  if (uniqueArtists.size < tracksListSize) {
+    // Если уникальных артистов меньше, чем нужно выдать треков
+    // Возьмем всех уникальных и остальных рандомных
+    for (let artist of uniqueArtists) {
+      const artistTracks = uniqueArtistsTracks.get(artist);
+      const n = artistTracks.length;
+      const i = Math.floor(udg.next().value * n);
+      currentTracks.push(artistTracks[i]);
     }
-  });
-  // console.log(correctAnswerIndexes)
-
-  return {
-    tracks: currentTracks,
-    correctAnswer: {
-      genre,
-      indexes: correctAnswerIndexes
+    const uniqueArtistsArr = Array.from(uniqueArtists);
+    const uniqueArtistsLength = uniqueArtistsArr.length;
+    while (currentTracks.length < tracksListSize) {
+      const i = Math.floor(udg.next().value * uniqueArtistsLength);
+      const artistTracks = uniqueArtistsTracks.get(uniqueArtistsArr[i]);
+      const trackIndex = Math.floor(udg.next().value * artistTracks.length);
+      currentTracks.push(artistTracks[trackIndex]);
     }
-  };
+  } else if (uniqueArtists.size === tracksListSize) {
+    // Если уникальных артистов столько же, сколько нужно выдать треков
+    // Возьмем с каждого артиста по рандомному треку
+    for (let artist of uniqueArtists) {
+      const artistTracks = uniqueArtistsTracks.get(artist);
+      const n = artistTracks.length;
+      const i = Math.floor(udg.next().value * n);
+      currentTracks.push(artistTracks[i]);
+    }
+  } else {
+    // Если уникальных артистов больше, чем нужно выдать треков
+    // Возьмем рандомных артистов, а у них по рандомному треку
+    const uniqueArtistsArr = Array.from(uniqueArtists);
+    const uniqueArtistsLength = uniqueArtistsArr.length;
+    const indexes = new Set();
+    while (indexes.size < tracksListSize) {
+      indexes.add(Math.floor(udg.next().value * uniqueArtistsLength));
+    }
+    for (let i of indexes) {
+      const artistTracks = uniqueArtistsTracks.get(uniqueArtistsArr[i]);
+      const trackIndex = Math.floor(udg.next().value * artistTracks.length);
+      currentTracks.push(artistTracks[trackIndex]);
+    }
+  }
+  currentTracks = markRandomCorrect(currentTracks, type);
+  return currentTracks;
 };
 
 export default (totalGamesCount = config.maxGameRounds,
@@ -91,15 +104,16 @@ export default (totalGamesCount = config.maxGameRounds,
   const questions = [];
 
   for (let i = 0; i < artistGamesCount; i++) {
-    questions.push(Object.assign(getRandomAtristData(trackList), {
-      type: `artist`
-    }));
+    questions.push({
+      tracks: getGenericData(GameType.ARTIST, getTrackList(), config.maxTracksArtist),
+      type: GameType.ARTIST
+    });
   }
   for (let i = 0; i < genreGamesCount; i++) {
-    questions.push(Object.assign(getRandomGenreData(trackList), {
-      type: `genre`
-    }));
+    questions.push({
+      tracks: getGenericData(GameType.GENRE, getTrackList(), config.maxTracksGenre),
+      type: GameType.GENRE
+    });
   }
-
   return questions;
 };
