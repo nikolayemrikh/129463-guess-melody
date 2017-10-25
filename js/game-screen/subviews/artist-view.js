@@ -53,7 +53,6 @@ export default class GameArtistView extends AbstractView {
   }
 
   _checkAnswer(artistName) {
-    console.log(artistName === this._model.currentQuestion.tracks.find((track) => track.isCorrect).artist)
     return artistName === this._model.currentQuestion.tracks.find((track) => track.isCorrect).artist;
   }
 

@@ -6,7 +6,7 @@ import GameView from './game-view';
 import getRandomData from '../utils/random-data';
 import changeView from '../utils/change-view';
 import {getScore} from '../utils';
-import {Status, GameType} from '../enums';
+import {Status} from '../enums';
 
 const randomData = getRandomData();
 

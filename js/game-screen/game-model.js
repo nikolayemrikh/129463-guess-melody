@@ -1,5 +1,3 @@
-import config from '../config';
-
 export default class GameModel {
   constructor(questions) {
     this._questions = questions;
@@ -32,19 +30,6 @@ export default class GameModel {
     this.currentQuestion = null;
     return false;
   }
-
-  // _setTimer() {
-  //   let time = 0;
-  //   if (!this.answers.length) {
-  //     time = config.maxTimeInSec;
-  //   } else {
-  //     this.answers.forEach((ans) => {
-  //       time += ans.timeInSec;
-  //     });
-  //     time = config.maxTimeInSec - time;
-  //   }
-  //   this.timer = new Timer(time);
-  // }
 
   get answersSummaryTime() {
     let time = 0;

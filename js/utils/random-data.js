@@ -27,7 +27,6 @@ const markRandomCorrect = (tracks, type) => {
 
   tracks.forEach((el, i) => {
     tracks[i].isCorrect = el[type] === typeValue;
-    el[type] === typeValue ? console.log(i, tracks[i][type]) : null;
   });
   return tracks;
 };

@@ -36,4 +36,4 @@ export default () => {
     src: `https://www.youtube.com/audiolibrary_download?vid=bcbe5be936a32fb1`,
     genre: `Electronic`
   }];
-}
+};
