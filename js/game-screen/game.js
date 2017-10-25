@@ -18,24 +18,27 @@ class GameScreen {
 
   init(answers = []) {
     this._model.init(answers);
-    if (this._interval) {
-      clearInterval(this._interval);
-    }
-    this._setTimer();
+    this._timer = new Timer(config.maxTimeInSec);
     this._model.nextQuestion(this._timer.remainingTime);
     this._timer.addTickListener(() => this._view.updateTimer(this._timer.remainingTime));
-    this._interval = setInterval(() => {
-      const isDone = this._timer.tick();
-      if (isDone) {
-        App.showResult({
-          status: Status.TIME_OVER
-        });
-      }
-    }, 1000);
+    const startTimeout = () => {
+      setTimeout(() => {
+        const isDone = this._timer.tick();
+        if (isDone) {
+          App.showResult({
+            status: Status.TIME_OVER
+          });
+        } else {
+          startTimeout();
+        }
+      }, 1000);
+    };
     changeView(this._view);
-    this._view.updateTimer(this._timer.remainingTime);
     this._view.onAnswer = this.onAnswer.bind(this);
+    this._view.updateTimer(this._timer.remainingTime);
+    this._view.updateMistakes();
     this._view.updateSubViews();
+    startTimeout();
   }
 
   onAnswer(isCorrect) {
@@ -60,7 +63,6 @@ class GameScreen {
     const hasNext = this._model.nextQuestion(this._timer.remainingTime);
     if (hasNext) {
       this._view.updateSubViews();
-      App.updateGameHash(this._model.answers);
     } else {
       const fastAnswersCount = this._model.answers.filter((answ) => {
         return answ.isCorrect && (answ.timeInSec <= config.fastAnswerTimeInSec);
@@ -73,12 +75,6 @@ class GameScreen {
         mistakesCnt: this._model.mistakesCnt
       });
     }
-  }
-
-  _setTimer() {
-    const maxTime = config.maxTimeInSec;
-    let time = !this._model.answers.length ? maxTime : maxTime - this._model.answersSummaryTime;
-    this._timer = new Timer(time);
   }
 }
 

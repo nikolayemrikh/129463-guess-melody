@@ -32,23 +32,8 @@ export default class App {
     }
     switch (hash) {
       case ScreenHash.GAME:
-        try {
-          const obj = JSON.parse(json);
-          const answers = obj.answers;
-          if (!(answers instanceof Array)) {
-            throw new TypeError(`No answers or wrong type`);
-          }
-          const correctArray = answers.every((ans) => {
-            return ans.hasOwnProperty(`isCorrect`) && ans.hasOwnProperty(`timeInSec`);
-          });
-          if (!correctArray) {
-            throw new Error(`Array has wrong data`);
-          }
-          gameScreen.init(answers);
-        } catch (err) {
           gameScreen.init();
-        }
-        break;
+          break;
       case ScreenHash.RESULT:
         try {
           const gameResult = JSON.parse(json);
@@ -64,12 +49,8 @@ export default class App {
     location.hash = ScreenHash.GREETING;
   }
 
-  static showGame(answers = []) {
-    location.hash = `${ScreenHash.GAME}?${JSON.stringify({answers})}`;
-  }
-
-  static updateGameHash(answers) {
-    history.pushState(null, null, `#${ScreenHash.GAME}?${JSON.stringify({answers})}`);
+  static showGame() {
+    location.hash = ScreenHash.GAME;
   }
 
   static showResult(gameResult) {
