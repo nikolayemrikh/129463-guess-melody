@@ -97,9 +97,10 @@ const getGenericData = (type, tracks, tracksListSize) => {
   return currentTracks;
 };
 
-export default (totalGamesCount = config.maxGameRounds,
-    artistGamesCount = totalGamesCount / 2,
-    genreGamesCount = totalGamesCount / 2) => {
+export default () => {
+  const totalGamesCount = config.maxGameRounds;
+  const artistGamesCount = totalGamesCount / 2;
+  const genreGamesCount = totalGamesCount / 2;
   const questions = [];
 
   for (let i = 0; i < artistGamesCount; i++) {

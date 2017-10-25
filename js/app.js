@@ -32,8 +32,8 @@ export default class App {
     }
     switch (hash) {
       case ScreenHash.GAME:
-          gameScreen.init();
-          break;
+        gameScreen.init();
+        break;
       case ScreenHash.RESULT:
         try {
           const gameResult = JSON.parse(json);

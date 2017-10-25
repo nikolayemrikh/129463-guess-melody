@@ -15,7 +15,7 @@ export default class GameView extends AbstractView {
   }
 
   get template() {
-    return `<section class="main main--level main--level-${this._model.currentQuestion.type}"><div>
+    return `<section class="main main--level"><div>
     <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
       <circle
         cx="390" cy="390" r="${circleRadius}"
@@ -56,11 +56,6 @@ export default class GameView extends AbstractView {
   }
 
   updateSubViews() {
-    if (this._model.previousQuestion &&
-      this._model.previousQuestion.type !== this._model.currentQuestion.type) {
-      this.element.classList.toggle(`main--level-artist`);
-      this.element.classList.toggle(`main--level-genre`);
-    }
     const wrapEl = this._containerEl.querySelector(`.main-wrap`);
     if (wrapEl) {
       this._containerEl.removeChild(wrapEl);
