@@ -21,8 +21,11 @@ class GameScreen {
     this._timer = new Timer(config.maxTimeInSec);
     this._model.nextQuestion(this._timer.remainingTime);
     this._timer.addTickListener(() => this._view.updateTimer(this._timer.remainingTime));
+    if (this._timeout) {
+      clearTimeout(this._timeout);
+    }
     const startTimeout = () => {
-      setTimeout(() => {
+      this._timeout = setTimeout(() => {
         const isDone = this._timer.tick();
         if (isDone) {
           App.showResult({
