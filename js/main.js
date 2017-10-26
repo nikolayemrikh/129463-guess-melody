@@ -1,5 +1,3 @@
-import show from './utils/show';
-import getGreetingView from './components/greeting';
+import App from './app';
 
-const greetingView = getGreetingView();
-show(greetingView.element);
+App.init();
