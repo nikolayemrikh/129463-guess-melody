@@ -33,21 +33,20 @@ const markRandomCorrect = (tracks, type) => {
 
 const getGenericData = (type, tracks, tracksListSize) => {
   const tmpTracks = tracks.slice();
-  // let tmpTracksLength = tmpTracks.length;
   let currentTracks = [];
 
   const uniqueArtists = new Set(); // уникальные артисты
   const uniqueArtistsTracks = new Map(); // соответствующие им треки
 
-  for (let track of tmpTracks) {
+  for (const track of tmpTracks) {
     uniqueArtists.add(track[type]);
   }
 
-  for (let artist of uniqueArtists) {
+  for (const artist of uniqueArtists) {
     uniqueArtistsTracks.set(artist, []);
   }
 
-  for (let track of tmpTracks) {
+  for (const track of tmpTracks) {
     const arr = uniqueArtistsTracks.get(track[type]);
     arr.push(track);
   }
@@ -55,7 +54,7 @@ const getGenericData = (type, tracks, tracksListSize) => {
   if (uniqueArtists.size < tracksListSize) {
     // Если уникальных артистов меньше, чем нужно выдать треков
     // Возьмем всех уникальных и остальных рандомных
-    for (let artist of uniqueArtists) {
+    for (const artist of uniqueArtists) {
       const artistTracks = uniqueArtistsTracks.get(artist);
       const n = artistTracks.length;
       const i = Math.floor(udg.next().value * n);
@@ -72,7 +71,7 @@ const getGenericData = (type, tracks, tracksListSize) => {
   } else if (uniqueArtists.size === tracksListSize) {
     // Если уникальных артистов столько же, сколько нужно выдать треков
     // Возьмем с каждого артиста по рандомному треку
-    for (let artist of uniqueArtists) {
+    for (const artist of uniqueArtists) {
       const artistTracks = uniqueArtistsTracks.get(artist);
       const n = artistTracks.length;
       const i = Math.floor(udg.next().value * n);
@@ -87,7 +86,7 @@ const getGenericData = (type, tracks, tracksListSize) => {
     while (indexes.size < tracksListSize) {
       indexes.add(Math.floor(udg.next().value * uniqueArtistsLength));
     }
-    for (let i of indexes) {
+    for (const i of indexes) {
       const artistTracks = uniqueArtistsTracks.get(uniqueArtistsArr[i]);
       const trackIndex = Math.floor(udg.next().value * artistTracks.length);
       currentTracks.push(artistTracks[trackIndex]);

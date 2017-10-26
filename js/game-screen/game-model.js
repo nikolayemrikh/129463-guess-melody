@@ -4,14 +4,13 @@ export default class GameModel {
   }
 
   init(answers = []) {
-    this.previousQuestion = null;
     this.currentQuestion = null;
     this.answers = answers;
   }
 
   get mistakesCnt() {
     let cnt = 0;
-    for (let ans of this.answers) {
+    for (const ans of this.answers) {
       if (!ans.isCorrect) {
         cnt++;
       }
@@ -21,7 +20,6 @@ export default class GameModel {
 
   nextQuestion(startRemainingTime) {
     const nextQuestionIndex = this.answers.length;
-    this.previousQuestion = this.currentQuestion;
     if (nextQuestionIndex < this._questions.length) {
       this.currentQuestion = this._questions[nextQuestionIndex];
       this.questionStartRemainingTime = startRemainingTime;
@@ -33,7 +31,7 @@ export default class GameModel {
 
   get answersSummaryTime() {
     let time = 0;
-    for (let ans of this.answers) {
+    for (const ans of this.answers) {
       time += ans.timeInSec;
     }
     return time;

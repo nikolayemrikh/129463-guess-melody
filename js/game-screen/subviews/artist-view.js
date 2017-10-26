@@ -1,9 +1,9 @@
 import AbstractView from '../../abstract-view';
 
 export default class GameArtistView extends AbstractView {
-  constructor(model) {
+  constructor(currentQuestion) {
     super();
-    this._model = model;
+    this._currentQuestion = currentQuestion;
   }
 
   get template() {
@@ -11,7 +11,7 @@ export default class GameArtistView extends AbstractView {
   <h2 class="title main-title">Кто исполняет эту песню?</h2>
   <div class="player-wrapper">
     <div class="player">
-      <audio src="${this._model.currentQuestion.tracks.find((track) => track.isCorrect).src}" autoplay></audio>
+      <audio src="${this._currentQuestion.tracks.find((track) => track.isCorrect).src}" autoplay></audio>
       <button class="player-control player-control--pause"></button>
       <div class="player-track">
         <span class="player-status"></span>
@@ -19,7 +19,7 @@ export default class GameArtistView extends AbstractView {
     </div>
   </div>
   <form class="main-list">
-  ${this._model.currentQuestion.tracks.map((track, i) => `
+  ${this._currentQuestion.tracks.map((track, i) => `
     <div class="main-answer-wrapper">\
       <input class="main-answer-r" type="radio" id="answer-${i}" name="answer" value="${track.artist}"/>\
       <label class="main-answer" for="answer-${i}">\
@@ -53,7 +53,7 @@ export default class GameArtistView extends AbstractView {
   }
 
   _checkAnswer(artistName) {
-    return artistName === this._model.currentQuestion.tracks.find((track) => track.isCorrect).artist;
+    return artistName === this._currentQuestion.tracks.find((track) => track.isCorrect).artist;
   }
 
   onPlayerControlClick() {}

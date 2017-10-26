@@ -5,8 +5,8 @@ import GameGenreView from './subviews/genre-view';
 import {getTimeStrFromNumber} from '../utils';
 import {GameType} from '../enums';
 
-const circleRadius = 370;
-const circleLength = 2 * Math.PI * circleRadius;
+const CIRCLE_RADIUS = 370;
+const CIRCLE_LENGTH = 2 * Math.PI * CIRCLE_RADIUS;
 
 export default class GameView extends AbstractView {
   constructor(model) {
@@ -18,8 +18,8 @@ export default class GameView extends AbstractView {
     return `<section class="main main--level"><div>
     <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
       <circle
-        cx="390" cy="390" r="${circleRadius}"
-        stroke-dasharray="${circleLength}"
+        cx="390" cy="390" r="${CIRCLE_RADIUS}"
+        stroke-dasharray="${CIRCLE_LENGTH}"
         class="timer-line"
         style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
 
@@ -62,11 +62,11 @@ export default class GameView extends AbstractView {
     }
     switch (this._model.currentQuestion.type) {
       case GameType.ARTIST:
-        this._subView = new GameArtistView(this._model);
+        this._subView = new GameArtistView(this._model.currentQuestion);
         this._subView.onSelectChange = this.onAnswer;
         break;
       case GameType.GENRE:
-        this._subView = new GameGenreView(this._model);
+        this._subView = new GameGenreView(this._model.currentQuestion);
         this._subView.onSubmit = this.onAnswer;
         break;
     }
@@ -81,7 +81,7 @@ export default class GameView extends AbstractView {
 
   updateTimer(remainingTime) {
     const offset = this._getStrokeOffset(remainingTime);
-    this._circleEl.setAttribute(`stroke-dashoffset`, circleLength - offset);
+    this._circleEl.setAttribute(`stroke-dashoffset`, CIRCLE_LENGTH - offset);
     [
       this._timerValueMins.textContent,
       this._timerValueSecs.textContent
@@ -92,7 +92,7 @@ export default class GameView extends AbstractView {
     const pastTime = config.maxTimeInSec - remainingTime;
     const ratio = pastTime / config.maxTimeInSec;
 
-    return Math.round(circleLength - circleLength * ratio);
+    return Math.round(CIRCLE_LENGTH - CIRCLE_LENGTH * ratio);
   }
 
   onAnswer() {}
