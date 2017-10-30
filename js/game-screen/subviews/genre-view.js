@@ -4,13 +4,14 @@ export default class GameGenreView extends AbstractView {
   constructor(currentQuestion) {
     super();
     this._currentQuestion = currentQuestion;
+    this._correctAnswerIndexes = new Set(this._getCorrectAnswerIndexes());
   }
 
   get template() {
     return `<div class="main-wrap">
-  <h2 class="title">Выберите инди-рок треки</h2>
+  <h2 class="title">${this._currentQuestion.question}</h2>
   <form class="genre">
-  ${this._currentQuestion.tracks.map((track, i) => `
+  ${this._currentQuestion.answers.map((track, i) => `
     <div class="genre-answer">
       <div class="player-wrapper">
         <div class="player">
@@ -67,10 +68,19 @@ export default class GameGenreView extends AbstractView {
     });
   }
 
+  _getCorrectAnswerIndexes() {
+    const indexes = [];
+    this._currentQuestion.answers.forEach((ans, i) => {
+      if (ans.genre === this._currentQuestion.genre) {
+        indexes.push(i);
+      }
+    });
+    return indexes;
+  }
+
   _checkAnswer(checkedTracksIndexes) {
-    return this._currentQuestion.tracks.every((track, i) => {
-      const hasCheckedIndex = checkedTracksIndexes.indexOf(i) !== -1;
-      return track.isCorrect ? hasCheckedIndex : !hasCheckedIndex;
+    return checkedTracksIndexes.every((indexEl) => {
+      return this._correctAnswerIndexes.has(indexEl);
     });
   }
 

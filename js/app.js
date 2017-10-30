@@ -1,5 +1,5 @@
 import greetingScreen from './greeting-screen/greeting';
-import gameScreen from './game-screen/game';
+import GameScreen from './game-screen/game';
 import resultScreen from './result-screen/result';
 import config from './config';
 // #game?{"answers": [{"timeInSec": 20, "isCorrect": false}]}
@@ -127,12 +127,15 @@ export default class App {
       const [hash, data] = hashValue.split(`?`);
       this.changeScreen(hash, data);
     };
-    const promises = [
+    const keyPromises = [
       importKey(config.keypair.public, false),
       importKey(config.keypair.private, true)
     ];
-    Promise.all(promises).then((keys) => {
+    const keyPromiseAll = Promise.all(keyPromises);
+    const allPromises = [keyPromiseAll, this.getQuestions()];
+    Promise.all(allPromises).then(([keys, questions]) => {
       [cryptoKeys.publicKey, cryptoKeys.privateKey] = keys;
+      this.gameScreen = new GameScreen(questions);
       window.onhashchange = hashChangeHandler;
       hashChangeHandler();
     });
@@ -148,7 +151,7 @@ export default class App {
     }
     switch (hash) {
       case ScreenHash.GAME:
-        gameScreen.init();
+        this.gameScreen.init(this.questions);
         break;
       case ScreenHash.RESULT:
         try {
@@ -188,6 +191,14 @@ export default class App {
   static showResult(gameResult) {
     encryptResult(cryptoKeys.publicKey, gameResult).then((strOfHexes) => {
       location.hash = `${ScreenHash.RESULT}?${strOfHexes}`;
+    });
+  }
+
+  static getQuestions(url = config.dataUrl) {
+    return new Promise((resolve, reject) => {
+      fetch(url).then((res) => {
+        res.json().then((arr) => resolve(arr));
+      }).catch(reject);
     });
   }
 }

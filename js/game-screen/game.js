@@ -3,15 +3,12 @@ import Timer from '../utils/timer';
 import App from '../app';
 import GameModel from './game-model';
 import GameView from './game-view';
-import getRandomData from '../utils/random-data';
 import changeView from '../utils/change-view';
 import {getScore} from '../utils';
 import {Status} from '../enums';
 
-const randomData = getRandomData();
-
-class GameScreen {
-  constructor(questions = randomData) {
+export default class GameScreen {
+  constructor(questions) {
     this._model = new GameModel(questions);
     this._view = new GameView(this._model);
   }
@@ -80,5 +77,3 @@ class GameScreen {
     }
   }
 }
-
-export default new GameScreen();
