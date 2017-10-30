@@ -1,9 +1,8 @@
 export const Status = {
-  WIN: `win`,
-  TIME_OVER: `time-over`,
-  ATTEMPTS_OVER: `attempts-over`
+  WIN: 0,
+  TIME_OVER: 1,
+  ATTEMPTS_OVER: 2
 };
-
 
 export const GameType = {
   ARTIST: `artist`,

@@ -48,7 +48,6 @@ export const getPluralForm = (count, forms) => {
   }
 };
 
-
 export const getElement = (htmlMarkup) => {
   const div = document.createElement(`div`);
   div.innerHTML = htmlMarkup;
