@@ -132,12 +132,14 @@ export default class App {
       importKey(config.keypair.private, true)
     ];
     const keyPromiseAll = Promise.all(keyPromises);
-    const allPromises = [keyPromiseAll, this.getQuestions()];
-    Promise.all(allPromises).then(([keys, questions]) => {
+    const allPromises = [keyPromiseAll, fetch(config.dataUrl)];
+    Promise.all(allPromises).then(([keys, questionsData]) => {
       [cryptoKeys.publicKey, cryptoKeys.privateKey] = keys;
-      this.gameScreen = new GameScreen(questions);
-      window.onhashchange = hashChangeHandler;
-      hashChangeHandler();
+      questionsData.json().then((questions) => {
+        this.gameScreen = new GameScreen(questions);
+        window.onhashchange = hashChangeHandler;
+        hashChangeHandler();
+      });
     });
   }
   /**
@@ -188,14 +190,6 @@ export default class App {
   static showResult(gameResult) {
     encryptResult(cryptoKeys.publicKey, gameResult).then((strOfHexes) => {
       location.hash = `${ScreenHash.RESULT}?${strOfHexes}`;
-    });
-  }
-
-  static getQuestions(url = config.dataUrl) {
-    return new Promise((resolve, reject) => {
-      fetch(url).then((res) => {
-        res.json().then((arr) => resolve(arr));
-      }).catch(reject);
     });
   }
 }
