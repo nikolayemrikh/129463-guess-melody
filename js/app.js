@@ -41,7 +41,7 @@ const ScreenHash = {
 */
 const joinGameResultValues = (gameResult) => {
   const {status, score, winInSeconds, fastAnswersCount, mistakesCnt} = gameResult;
-  let arr = [status, score, winInSeconds, fastAnswersCount, mistakesCnt];
+  const arr = [status, score, winInSeconds, fastAnswersCount, mistakesCnt];
   return arr.join(`:`);
 };
 
@@ -156,9 +156,6 @@ export default class App {
       case ScreenHash.RESULT:
         try {
           decryptResult(cryptoKeys.privateKey, data).then((gameResult) => {
-            if (typeof gameResult.status === `undefined`) {
-              throw new Error(`Wrong parameters`);
-            }
             resultScreen.init(gameResult);
           }).catch(() => {
             this.showGreeting();
