@@ -127,6 +127,7 @@ export default class App {
       const [hash, data] = hashValue.split(`?`);
       this.changeScreen(hash, data);
     };
+    window.onhashchange = hashChangeHandler;
     const keyPromises = [
       importKey(config.keypair.public, false),
       importKey(config.keypair.private, true)
@@ -137,9 +138,12 @@ export default class App {
       [cryptoKeys.publicKey, cryptoKeys.privateKey] = keys;
       questionsData.json().then((questions) => {
         this.gameScreen = new GameScreen(questions);
-        window.onhashchange = hashChangeHandler;
+        hashChangeHandler();
+      }).catch(() => {
         hashChangeHandler();
       });
+    }).catch(() => {
+      hashChangeHandler();
     });
   }
   /**
@@ -153,7 +157,11 @@ export default class App {
     }
     switch (hash) {
       case ScreenHash.GAME:
-        this.gameScreen.init(this.questions);
+        if (this.questions && this.questions.length) {
+          this.gameScreen.init(this.questions);
+        } else {
+          this.showGreeting();
+        }
         break;
       case ScreenHash.RESULT:
         try {
