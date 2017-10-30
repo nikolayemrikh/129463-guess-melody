@@ -24,7 +24,6 @@ const markRandomCorrect = (tracks, type) => {
   const typeValue = tracks[
       Math.floor(udg.next().value * tracks.length)
   ][type];
-
   tracks.forEach((el, i) => {
     tracks[i].isCorrect = el[type] === typeValue;
   });

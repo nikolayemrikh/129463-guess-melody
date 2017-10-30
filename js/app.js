@@ -78,15 +78,17 @@ const decryptResult = (privateKey, strOfHexes) => {
     throw new TypeError(`arguments[1] is not of type string`);
   }
   const arr = strOfHexes.split(`:`).map((str) => Number.parseInt(str, 16));
-  const buffer = new Uint8Array(arr);
+  const encryptedBuffer = new Uint8Array(arr);
   return new Promise((resolve, reject) => {
     window.crypto.subtle.decrypt({
       name: `RSA-OAEP`
     },
     privateKey,
-    buffer).then((decrypted) => {
-      const decryptedResult = new Uint8Array(decrypted);
-      resolve(decryptedResult);
+    encryptedBuffer).then((decrypted) => {
+      const decryptedBuffer = new Uint8Array(decrypted);
+      const decoded = textDecoder.decode(decryptedBuffer);
+      const gameResult = getGameResultFromJoinedHexes(decoded);
+      resolve(gameResult);
     }).catch(reject);
   });
 };
@@ -150,9 +152,7 @@ export default class App {
         break;
       case ScreenHash.RESULT:
         try {
-          decryptResult(cryptoKeys.privateKey, data).then((encodedResult) => {
-            const str = textDecoder.decode(encodedResult);
-            const gameResult = getGameResultFromJoinedHexes(str);
+          decryptResult(cryptoKeys.privateKey, data).then((gameResult) => {
             if (typeof gameResult.status === `undefined`) {
               throw new Error(`Wrong parameters`);
             }
