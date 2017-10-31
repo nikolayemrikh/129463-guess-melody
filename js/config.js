@@ -1,4 +1,5 @@
 export default {
+  dataUrl: `https://es.dump.academy/guess-melody/questions`,
   maxMistakesCount: 4,
   maxGameRounds: 10,
   maxTimeInSec: 5 * 60,

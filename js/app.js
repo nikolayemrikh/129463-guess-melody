@@ -1,5 +1,5 @@
 import greetingScreen from './greeting-screen/greeting';
-import gameScreen from './game-screen/game';
+import GameScreen from './game-screen/game';
 import resultScreen from './result-screen/result';
 import config from './config';
 // #game?{"answers": [{"timeInSec": 20, "isCorrect": false}]}
@@ -41,7 +41,7 @@ const ScreenHash = {
 */
 const joinGameResultValues = (gameResult) => {
   const {status, score, winInSeconds, fastAnswersCount, mistakesCnt} = gameResult;
-  let arr = [status, score, winInSeconds, fastAnswersCount, mistakesCnt];
+  const arr = [status, score, winInSeconds, fastAnswersCount, mistakesCnt];
   return arr.join(`:`);
 };
 
@@ -127,13 +127,22 @@ export default class App {
       const [hash, data] = hashValue.split(`?`);
       this.changeScreen(hash, data);
     };
-    const promises = [
+    window.onhashchange = hashChangeHandler;
+    const keyPromises = [
       importKey(config.keypair.public, false),
       importKey(config.keypair.private, true)
     ];
-    Promise.all(promises).then((keys) => {
+    const keyPromiseAll = Promise.all(keyPromises);
+    const allPromises = [keyPromiseAll, fetch(config.dataUrl)];
+    Promise.all(allPromises).then(([keys, questionsData]) => {
       [cryptoKeys.publicKey, cryptoKeys.privateKey] = keys;
-      window.onhashchange = hashChangeHandler;
+      questionsData.json().then((questions) => {
+        this.gameScreen = new GameScreen(questions);
+        hashChangeHandler();
+      }).catch(() => {
+        hashChangeHandler();
+      });
+    }).catch(() => {
       hashChangeHandler();
     });
   }
@@ -148,14 +157,15 @@ export default class App {
     }
     switch (hash) {
       case ScreenHash.GAME:
-        gameScreen.init();
+        if (this.questions && this.questions.length) {
+          this.gameScreen.init(this.questions);
+        } else {
+          this.showGreeting();
+        }
         break;
       case ScreenHash.RESULT:
         try {
           decryptResult(cryptoKeys.privateKey, data).then((gameResult) => {
-            if (typeof gameResult.status === `undefined`) {
-              throw new Error(`Wrong parameters`);
-            }
             resultScreen.init(gameResult);
           }).catch(() => {
             this.showGreeting();
