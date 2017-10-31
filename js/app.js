@@ -138,7 +138,6 @@ export default class App {
       [cryptoKeys.publicKey, cryptoKeys.privateKey] = keys;
       questionsData.json().then((questions) => {
         this.questions = questions;
-        console.log(questions.map(q => q.type === `artist` ? q.answers.findIndex(el => el.isCorrect) + 1 : q.answers.map(el => el.genre === q.genre ? true : false).map((el, i) => el ? i + 1 : null)))
         this.gameScreen = new GameScreen(questions);
         hashChangeHandler();
       }).catch(() => {

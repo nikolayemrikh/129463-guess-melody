@@ -75,7 +75,7 @@ export default class ResultView extends AbstractView {
     return text;
   }
 
-  setComparisonMarkup(otherPlayersResults) {
+  setComparisonText(otherPlayersResults) {
     if (this._gameResult.status !== Status.WIN) {
       this._mainComparisonEl.textContent = ``;
       return;

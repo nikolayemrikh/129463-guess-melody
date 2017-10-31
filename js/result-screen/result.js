@@ -16,7 +16,7 @@ class ResultScreen {
       fetch(config.statsUrl).then((resp) => {
         if (resp.ok) {
           resp.json().then((results) => {
-            this._view.setComparisonMarkup(results);
+            this._view.setComparisonText(results);
           });
         }
       });
