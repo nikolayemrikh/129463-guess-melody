@@ -13,11 +13,13 @@ class ResultScreen {
     };
     changeView(this._view);
     if (gameResult.status === Status.WIN) {
-      fetch(config.statsUrl).then((data) => {
-        data.json().then((results) => {
-          this._view.setComparisonMarkup(results);
-        });
-      }).catch(() => {});
+      fetch(config.statsUrl).then((resp) => {
+        if (resp.ok) {
+          resp.json().then((results) => {
+            this._view.setComparisonMarkup(results);
+          });
+        }
+      });
     }
   }
 }

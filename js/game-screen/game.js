@@ -75,13 +75,7 @@ export default class GameScreen {
         fastAnswersCount,
         mistakesCnt: this._model.mistakesCnt
       };
-      fetch(config.statsUrl, {
-        method: `POST`,
-        body: JSON.stringify(result),
-        headers: {
-          "Content-type": `application/json`
-        }
-      }).then(() => {}).catch(() => {});
+      App.postResult(result);
       App.showResult(result);
     }
   }
