@@ -13,8 +13,8 @@ export default class GameScreen {
     this._view = new GameView(this._model);
   }
 
-  init(answers = []) {
-    this._model.init(answers);
+  init() {
+    this._model.init();
     this._timer = new Timer(config.maxTimeInSec);
     this._model.nextQuestion(this._timer.remainingTime);
     this._timer.addTickListener(() => this._view.updateTimer(this._timer.remainingTime));
@@ -28,6 +28,7 @@ export default class GameScreen {
           App.showResult({
             status: Status.TIME_OVER
           });
+          clearTimeout(this._timeout);
         } else {
           startTimeout();
         }
@@ -67,13 +68,21 @@ export default class GameScreen {
       const fastAnswersCount = this._model.answers.filter((answ) => {
         return answ.isCorrect && (answ.timeInSec <= config.fastAnswerTimeInSec);
       }).length;
-      App.showResult({
+      const result = {
         status: Status.WIN,
         score: getScore(this._model.answers, config.maxMistakesCount - this._model.mistakesCnt - 1),
         winInSeconds: config.maxTimeInSec - this._timer.remainingTime,
         fastAnswersCount,
         mistakesCnt: this._model.mistakesCnt
-      });
+      };
+      fetch(config.statsUrl, {
+        method: `POST`,
+        body: JSON.stringify(result),
+        headers: {
+          "Content-type": `application/json`
+        }
+      }).then(() => {}).catch(() => {});
+      App.showResult(result);
     }
   }
 }

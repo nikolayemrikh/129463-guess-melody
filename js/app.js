@@ -137,6 +137,7 @@ export default class App {
     Promise.all(allPromises).then(([keys, questionsData]) => {
       [cryptoKeys.publicKey, cryptoKeys.privateKey] = keys;
       questionsData.json().then((questions) => {
+        this.questions = questions;
         this.gameScreen = new GameScreen(questions);
         hashChangeHandler();
       }).catch(() => {
@@ -158,7 +159,7 @@ export default class App {
     switch (hash) {
       case ScreenHash.GAME:
         if (this.questions && this.questions.length) {
-          this.gameScreen.init(this.questions);
+          this.gameScreen.init();
         } else {
           this.showGreeting();
         }
