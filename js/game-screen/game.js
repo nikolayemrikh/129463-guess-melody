@@ -75,7 +75,6 @@ export default class GameScreen {
         fastAnswersCount,
         mistakesCnt: this._model.mistakesCnt
       };
-      App.postResult(result);
       App.showResult(result);
     }
   }

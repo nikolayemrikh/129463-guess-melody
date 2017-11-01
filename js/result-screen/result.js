@@ -6,6 +6,7 @@ import {Status} from '../enums';
 
 class ResultScreen {
   init(gameResult) {
+    App.postResult(gameResult);
     this._gameResult = gameResult;
     this._view = new ResultView(this._gameResult);
     this._view.onReplayClick = () => {
