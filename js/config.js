@@ -2,10 +2,11 @@ export default {
   dataUrl: `https://es.dump.academy/guess-melody/questions`,
   maxMistakesCount: 4,
   maxGameRounds: 10,
-  maxTimeInSec: 5 * 60,
+  maxTime: 5 * 60,
+  finishingTime: 30,
   maxTracksArtist: 3,
   maxTracksGenre: 4,
-  fastAnswerTimeInSec: 30,
+  fastAnswerTime: 30,
   keypair: {
     public: {
       "alg": `RSA-OAEP`,

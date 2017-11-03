@@ -8,3 +8,8 @@ export const GameType = {
   ARTIST: `artist`,
   GENRE: `genre`
 };
+
+export const PlayerControlClass = {
+  PLAY: `player-control--play`,
+  PAUSE: `player-control--pause`
+};

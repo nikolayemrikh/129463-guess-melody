@@ -15,8 +15,8 @@ export default class GreetingView extends AbstractView {
   }
 
   get template() {
-    const minutes = Math.floor(config.maxTimeInSec / 60);
-    const seconds = config.maxTimeInSec - (minutes * 60);
+    const minutes = Math.floor(config.maxTime / 60);
+    const seconds = config.maxTime - (minutes * 60);
     return `<section class="main main--welcome">
   <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
   <button class="main-play">Начать игру</button>

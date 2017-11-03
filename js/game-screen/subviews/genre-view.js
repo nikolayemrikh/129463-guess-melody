@@ -1,4 +1,5 @@
 import AbstractView from '../../abstract-view';
+import PlayerControlClass from '../enums';
 
 export default class GameGenreView extends AbstractView {
   constructor(currentQuestion) {
@@ -32,18 +33,54 @@ export default class GameGenreView extends AbstractView {
   }
 
   bind() {
+    const playerCtrls = new Map();
+    for (const ctrlBtn of [...this.element.querySelectorAll(`.player .player-control`)]) {
+      const audioEl = ctrlBtn.parentElement.querySelector(`audio`);
+      playerCtrls.set(ctrlBtn, audioEl);
+    }
+    let currCtrlBtn = null;
+    let lastPromise = null;
+
     this.element.addEventListener(`click`, (evt) => {
-      const btn = evt.target;
-      if (btn.classList.contains(`player-control`)) {
+      const ctrlBtn = evt.target;
+      if (ctrlBtn.classList.contains(`player-control`)) {
         evt.preventDefault();
-        const playerEl = btn.closest(`.player`);
-        const closestAudioEl = playerEl.querySelector(`audio`);
-        btn.classList.toggle(`player-control--pause`);
-        btn.classList.toggle(`player-control--play`);
-        if (closestAudioEl.paused) {
-          closestAudioEl.play();
+        // Если нажали на стоп играющего
+        if (ctrlBtn.classList.contains(PlayerControlClass.PAUSE) &&
+          ctrlBtn === currCtrlBtn) {
+          const audioEl = playerCtrls.get(ctrlBtn);
+          audioEl.pause();
+          ctrlBtn.classList.remove(PlayerControlClass.PAUSE);
+          ctrlBtn.classList.add(PlayerControlClass.PLAY);
+          currCtrlBtn = null;
         } else {
-          closestAudioEl.pause();
+          // Если нажали на плей, но есть играющий
+          if (currCtrlBtn !== null) {
+            const currAudioEl = playerCtrls.get(currCtrlBtn);
+            currAudioEl.pause();
+            currAudioEl.currentTime = 0; // Остановим играющий и скинем время
+            currCtrlBtn.classList.remove(PlayerControlClass.PAUSE);
+            currCtrlBtn.classList.add(PlayerControlClass.PLAY);
+          }
+          const nextAudioEl = playerCtrls.get(ctrlBtn);
+
+          const playPromise = nextAudioEl.play();
+          lastPromise = playPromise;
+          playPromise.then(() => {
+            // Если загрузился и запустился последний нажатый
+            if (playPromise === lastPromise) {
+              ctrlBtn.classList.add(PlayerControlClass.PAUSE);
+              ctrlBtn.classList.remove(PlayerControlClass.PLAY);
+              currCtrlBtn = ctrlBtn;
+            } else { // Нажатые ранее, но загруженные остановим
+              nextAudioEl.pause();
+            }
+          }).catch(() => {
+            // Если не загрузился последний нажатый — сбросим текущий
+            if (playPromise === lastPromise) {
+              currCtrlBtn = null;
+            }
+          });
         }
       }
     });

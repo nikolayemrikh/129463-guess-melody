@@ -15,7 +15,7 @@ export default class GameScreen {
 
   init(answers = []) {
     this._model.init(answers);
-    this._timer = new Timer(config.maxTimeInSec);
+    this._timer = new Timer(config.maxTime);
     this._model.nextQuestion(this._timer.remainingTime);
     this._timer.addTickListener(() => this._view.updateTimer(this._timer.remainingTime));
     if (this._timeout) {
@@ -65,12 +65,12 @@ export default class GameScreen {
       this._view.updateSubViews();
     } else {
       const fastAnswersCount = this._model.answers.filter((answ) => {
-        return answ.isCorrect && (answ.timeInSec <= config.fastAnswerTimeInSec);
+        return answ.isCorrect && (answ.timeInSec <= config.fastAnswerTime);
       }).length;
       App.showResult({
         status: Status.WIN,
         score: getScore(this._model.answers, config.maxMistakesCount - this._model.mistakesCnt - 1),
-        winInSeconds: config.maxTimeInSec - this._timer.remainingTime,
+        winInSeconds: config.maxTime - this._timer.remainingTime,
         fastAnswersCount,
         mistakesCnt: this._model.mistakesCnt
       });

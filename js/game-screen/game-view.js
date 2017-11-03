@@ -38,6 +38,7 @@ export default class GameView extends AbstractView {
   bind() {
     this._containerEl = this.element.querySelector(`.game-container`);
     this._mistakesContainerEl = this.element.querySelector(`.main-mistakes`);
+    this._timerValueEl = this.element.querySelector(`.timer-value`);
 
     this._timerValueMins = this.element.querySelector(`.timer-value-mins`);
     this._timerValueSecs = this.element.querySelector(`.timer-value-secs`);
@@ -86,11 +87,16 @@ export default class GameView extends AbstractView {
       this._timerValueMins.textContent,
       this._timerValueSecs.textContent
     ] = this._getTimeText(remainingTime);
+    if (remainingTime <= config.finishingTime) {
+      this._timerValueEl.classList.add(`timer-value--finished`);
+    } else {
+      this._timerValueEl.classList.remove(`timer-value--finished`);
+    }
   }
 
   _getStrokeOffset(remainingTime) {
-    const pastTime = config.maxTimeInSec - remainingTime;
-    const ratio = pastTime / config.maxTimeInSec;
+    const pastTime = config.maxTime - remainingTime;
+    const ratio = pastTime / config.maxTime;
 
     return Math.round(CIRCLE_LENGTH - CIRCLE_LENGTH * ratio);
   }

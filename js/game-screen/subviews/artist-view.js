@@ -1,4 +1,5 @@
 import AbstractView from '../../abstract-view';
+import PlayerControlClass from '../enums';
 
 export default class GameArtistView extends AbstractView {
   constructor(currentQuestion) {
@@ -34,15 +35,25 @@ export default class GameArtistView extends AbstractView {
 
   bind() {
     const form = this.element.querySelector(`.main-list`);
+    const audioEl = this.element.querySelector(`.player audio`);
+    const audioBtn = this.element.querySelector(`.player .player-control`);
+    audioEl.addEventListener(`playing`, () => {
+      audioBtn.classList.remove(PlayerControlClass.PLAY);
+      audioBtn.classList.add(PlayerControlClass.PAUSE);
+    });
+    audioEl.addEventListener(`pause`, () => {
+      audioBtn.classList.remove(PlayerControlClass.PAUSE);
+      audioBtn.classList.add(PlayerControlClass.PLAY);
+    });
     this.element.querySelector(`.player-control`).addEventListener(`click`, (evt) => {
       evt.preventDefault();
-      const audioEl = this.element.querySelector(`.player audio`);
       const btn = evt.target;
-      btn.classList.toggle(`player-control--pause`);
-      btn.classList.toggle(`player-control--play`);
-      if (audioEl.paused) {
+
+      if (btn.classList.contains(PlayerControlClass.PLAY)) {
         audioEl.play();
-      } else {
+        return;
+      }
+      if (btn.classList.contains(PlayerControlClass.PAUSE)) {
         audioEl.pause();
       }
     });
