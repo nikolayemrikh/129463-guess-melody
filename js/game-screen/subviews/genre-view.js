@@ -1,5 +1,5 @@
 import AbstractView from '../../abstract-view';
-import PlayerControlClass from '../enums';
+import {PlayerControlClass} from '../../enums';
 
 export default class GameGenreView extends AbstractView {
   constructor(currentQuestion) {
