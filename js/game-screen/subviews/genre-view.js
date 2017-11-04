@@ -1,5 +1,5 @@
 import AbstractView from '../../abstract-view';
-import {PlayerControlClass} from '../../enums';
+import PlayerView from '../../player';
 
 export default class GameGenreView extends AbstractView {
   constructor(currentQuestion) {
@@ -14,15 +14,6 @@ export default class GameGenreView extends AbstractView {
   <form class="genre">
   ${this._currentQuestion.answers.map((track, i) => `
     <div class="genre-answer">
-      <div class="player-wrapper">
-        <div class="player">
-          <audio src="${track.src}"></audio>
-          <button class="player-control player-control--play"></button>
-          <div class="player-track">
-            <span class="player-status"></span>
-          </div>
-        </div>
-      </div>
       <input type="checkbox" name="answer" value="${i}" id="a-${i}">
       <label class="genre-answer-check" for="a-${i}"></label>
     </div>`).join(``)}
@@ -33,57 +24,27 @@ export default class GameGenreView extends AbstractView {
   }
 
   bind() {
-    const playerCtrls = new Map();
-    for (const ctrlBtn of [...this.element.querySelectorAll(`.player .player-control`)]) {
-      const audioEl = ctrlBtn.parentElement.querySelector(`audio`);
-      playerCtrls.set(ctrlBtn, audioEl);
-    }
-    let currCtrlBtn = null;
-    let lastPromise = null;
+    const answers = this._currentQuestion.answers;
+    const players = [];
+    const genreAnswerEls = [...this.element.querySelectorAll(`.genre .genre-answer`)];
 
-    this.element.addEventListener(`click`, (evt) => {
-      const ctrlBtn = evt.target;
-      if (ctrlBtn.classList.contains(`player-control`)) {
-        evt.preventDefault();
-        // Если нажали на стоп играющего
-        if (ctrlBtn.classList.contains(PlayerControlClass.PAUSE) &&
-          ctrlBtn === currCtrlBtn) {
-          const audioEl = playerCtrls.get(ctrlBtn);
-          audioEl.pause();
-          ctrlBtn.classList.remove(PlayerControlClass.PAUSE);
-          ctrlBtn.classList.add(PlayerControlClass.PLAY);
-          currCtrlBtn = null;
-        } else {
-          // Если нажали на плей, но есть играющий
-          if (currCtrlBtn !== null) {
-            const currAudioEl = playerCtrls.get(currCtrlBtn);
-            currAudioEl.pause();
-            currAudioEl.currentTime = 0; // Остановим играющий и скинем время
-            currCtrlBtn.classList.remove(PlayerControlClass.PAUSE);
-            currCtrlBtn.classList.add(PlayerControlClass.PLAY);
+    for (const i in answers) {
+      if (answers.hasOwnProperty(i)) {
+        const answer = answers[i];
+        const genreAnswerEl = genreAnswerEls[i];
+        const player = new PlayerView(false, answer.src);
+        player.onPlayClick = () => {
+          for (const pl of players) {
+            if (pl === player) {
+              continue;
+            }
+            pl.stop();
           }
-          const nextAudioEl = playerCtrls.get(ctrlBtn);
-
-          const playPromise = nextAudioEl.play();
-          lastPromise = playPromise;
-          playPromise.then(() => {
-            // Если загрузился и запустился последний нажатый
-            if (playPromise === lastPromise) {
-              ctrlBtn.classList.add(PlayerControlClass.PAUSE);
-              ctrlBtn.classList.remove(PlayerControlClass.PLAY);
-              currCtrlBtn = ctrlBtn;
-            } else { // Нажатые ранее, но загруженные остановим
-              nextAudioEl.pause();
-            }
-          }).catch(() => {
-            // Если не загрузился последний нажатый — сбросим текущий
-            if (playPromise === lastPromise) {
-              currCtrlBtn = null;
-            }
-          });
-        }
+        };
+        players.push(player);
+        genreAnswerEl.insertAdjacentElement(`afterbegin`, player.element);
       }
-    });
+    }
 
     const form = this.element.querySelector(`.genre`);
     const answerCheckboxes = [...form.answer];

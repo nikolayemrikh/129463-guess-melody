@@ -1,24 +1,16 @@
 import AbstractView from '../../abstract-view';
-import {PlayerControlClass} from '../../enums';
+import PlayerView from '../../player';
 
 export default class GameArtistView extends AbstractView {
   constructor(currentQuestion) {
     super();
     this._currentQuestion = currentQuestion;
+    this._player = new PlayerView(true, currentQuestion.src);
   }
 
   get template() {
     return `<div class="main-wrap">
   <h2 class="title main-title">${this._currentQuestion.question}</h2>
-  <div class="player-wrapper">
-    <div class="player">
-      <audio src="${this._currentQuestion.src}" autoplay></audio>
-      <button class="player-control player-control--pause"></button>
-      <div class="player-track">
-        <span class="player-status"></span>
-      </div>
-    </div>
-  </div>
   <form class="main-list">
   ${this._currentQuestion.answers.map((ans, i) => `
     <div class="main-answer-wrapper">\
@@ -35,28 +27,8 @@ export default class GameArtistView extends AbstractView {
 
   bind() {
     const form = this.element.querySelector(`.main-list`);
-    const audioEl = this.element.querySelector(`.player audio`);
-    const audioBtn = this.element.querySelector(`.player .player-control`);
-    audioEl.addEventListener(`playing`, () => {
-      audioBtn.classList.remove(PlayerControlClass.PLAY);
-      audioBtn.classList.add(PlayerControlClass.PAUSE);
-    });
-    audioEl.addEventListener(`pause`, () => {
-      audioBtn.classList.remove(PlayerControlClass.PAUSE);
-      audioBtn.classList.add(PlayerControlClass.PLAY);
-    });
-    this.element.querySelector(`.player-control`).addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      const btn = evt.target;
+    form.insertAdjacentElement(`beforebegin`, this._player.element);
 
-      if (btn.classList.contains(PlayerControlClass.PLAY)) {
-        audioEl.play();
-        return;
-      }
-      if (btn.classList.contains(PlayerControlClass.PAUSE)) {
-        audioEl.pause();
-      }
-    });
     this.element.querySelector(`.main-list`).addEventListener(`change`, (evt) => {
       evt.preventDefault();
       const checkedIndex = Number.parseInt(form.answer.value, 10);
