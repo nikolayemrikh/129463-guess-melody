@@ -16,24 +16,10 @@ export default class Timer {
       }
     }
 
-    this._listeners.forEach((fn) => {
-      fn({
-        remainingTime: this._remainingTime,
-        isDone: this._isDone
-      });
-    });
     return this._isDone;
   }
 
   get remainingTime() {
     return this._remainingTime;
-  }
-
-  addTickListener(fn) {
-    this._listeners.push(fn);
-  }
-
-  stop() {
-    this._isDone = true;
   }
 }

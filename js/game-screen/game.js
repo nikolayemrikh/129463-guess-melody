@@ -6,6 +6,8 @@ import GameView from './game-view';
 import changeView from '../utils/change-view';
 import {Status} from '../enums';
 
+const timeInterval = 1000;
+
 export default class GameScreen {
   constructor(questions) {
     this._model = new GameModel(questions);
@@ -16,22 +18,21 @@ export default class GameScreen {
     this._model.init(answers);
     this._timer = new Timer(config.maxTime);
     this._model.nextQuestion(this._timer.remainingTime);
-    this._timer.addTickListener(() => this._view.updateTimer(this._timer.remainingTime));
     if (this._timeout) {
       clearTimeout(this._timeout);
     }
     const startTimeout = () => {
       this._timeout = setTimeout(() => {
         const isDone = this._timer.tick();
+        this._view.updateTimer(this._timer.remainingTime);
         if (isDone) {
           App.showResult({
             status: Status.TIME_OVER
           });
-          clearTimeout(this._timeout);
         } else {
           startTimeout();
         }
-      }, 1000);
+      }, timeInterval);
     };
     changeView(this._view);
     this._view.onAnswer = this.onAnswer.bind(this);
