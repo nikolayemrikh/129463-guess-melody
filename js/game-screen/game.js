@@ -14,8 +14,8 @@ export default class GameScreen {
     this._view = new GameView(this._model);
   }
 
-  init(answers = []) {
-    this._model.init(answers);
+  init() {
+    this._model.init();
     this._timer = new Timer(config.maxTime);
     this._model.nextQuestion(this._timer.remainingTime);
     if (this._timeout) {

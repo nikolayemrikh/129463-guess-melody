@@ -6,9 +6,9 @@ export default class GameModel {
     this._cachedMistacesCnt = 0;
   }
 
-  init(answers = []) {
+  init() {
     this.currentQuestion = null;
-    this.answers = answers;
+    this.answers = [];
     this._lastAnswersLength = this.answers.length;
   }
 
