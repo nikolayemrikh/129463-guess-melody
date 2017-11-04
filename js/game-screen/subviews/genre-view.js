@@ -80,9 +80,5 @@ export default class GameGenreView extends AbstractView {
     });
   }
 
-  onPlayPauseClick() {}
-
-  onTrackCheck() {}
-
   onSubmit() {}
 }

@@ -40,7 +40,5 @@ export default class GameArtistView extends AbstractView {
     return this._currentQuestion.answers[index].isCorrect;
   }
 
-  onPlayerControlClick() {}
-
   onSelectChange() {}
 }
