@@ -31,11 +31,10 @@ export default class PlayerView extends AbstractView {
       evt.preventDefault();
       const btn = evt.target;
       if (btn.classList.contains(PlayerControlClass.PLAY)) {
-        this.play();
+        this.onPlayClick();
       } else if (btn.classList.contains(PlayerControlClass.PAUSE)) {
         this.pause();
       }
-      this.onClick();
     });
   }
 
@@ -52,5 +51,5 @@ export default class PlayerView extends AbstractView {
     this.audioBtn.classList.add(PlayerControlClass.PLAY);
   }
 
-  onClick() {}
+  onPlayClick() {}
 }

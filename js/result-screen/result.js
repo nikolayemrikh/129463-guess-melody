@@ -7,8 +7,11 @@ import {getWinResultFromAnswers} from '../utils';
 
 class ResultScreen {
   init({status, answers}) {
-    const gameResult = getWinResultFromAnswers(answers);
-    App.postResult(gameResult);
+    let gameResult;
+    if (answers) {
+      gameResult = getWinResultFromAnswers(answers);
+      App.postResult(gameResult);
+    }
     this._view = new ResultView(status, gameResult);
     this._view.onReplayClick = () => {
       App.showGame();

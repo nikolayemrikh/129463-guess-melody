@@ -53,9 +53,6 @@ export default class ResultView extends AbstractView {
   }
 
   _getStatMarkup() {
-    const minutes = Math.floor(this._gameResult.winInSeconds / 60);
-    const seconds = this._gameResult.winInSeconds - (minutes * 60);
-
     let text;
     switch (this._status) {
       case Status.ATTEMPTS_OVER:
@@ -65,6 +62,8 @@ export default class ResultView extends AbstractView {
         text = `Время вышло!<br>Вы не успели отгадать все мелодии`;
         break;
       case Status.WIN:
+        const minutes = Math.floor(this._gameResult.winInSeconds / 60);
+        const seconds = this._gameResult.winInSeconds - (minutes * 60);
         text = `За ${minutes} ${getPluralForm(minutes, PluralForm.MINUTES)} \
 и ${seconds} ${getPluralForm(seconds, PluralForm.SECONDS)}
     <br>вы&nbsp;набрали ${this._gameResult.score} ${getPluralForm(this._gameResult.score, PluralForm.SCORE)} \

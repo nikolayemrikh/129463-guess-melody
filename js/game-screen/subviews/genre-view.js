@@ -34,10 +34,9 @@ export default class GameGenreView extends AbstractView {
       const genreAnswerEl = genreAnswerEls[i];
       const player = new PlayerView(false, answer.src);
 
-      player.onClick = () => {
+      player.onPlayClick = () => {
         if (currentPlayer) {
           currentPlayer.pause();
-          currentPlayer = null;
         }
         currentPlayer = player;
         currentPlayer.play();
