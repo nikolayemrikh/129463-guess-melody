@@ -81,7 +81,7 @@ export default class GameView extends AbstractView {
   }
 
   updateTimer(remainingTime) {
-    const offset = this._getStrokeOffset(remainingTime);
+    const offset = GameView.getStrokeOffset(remainingTime);
     this._circleEl.setAttribute(`stroke-dashoffset`, CIRCLE_LENGTH - offset);
     [
       this._timerValueMins.textContent,
@@ -94,7 +94,7 @@ export default class GameView extends AbstractView {
     }
   }
 
-  _getStrokeOffset(remainingTime) {
+  static getStrokeOffset(remainingTime) {
     const pastTime = config.maxTime - remainingTime;
     const ratio = pastTime / config.maxTime;
 
