@@ -1,5 +1,7 @@
+const username = `nikolayemrikh`;
 export default {
   dataUrl: `https://es.dump.academy/guess-melody/questions`,
+  statsUrl: `https://es.dump.academy/guess-melody/stats/${username}`,
   maxMistakesCount: 4,
   maxGameRounds: 10,
   maxTime: 5 * 60,

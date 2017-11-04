@@ -4,7 +4,6 @@ import App from '../app';
 import GameModel from './game-model';
 import GameView from './game-view';
 import changeView from '../utils/change-view';
-import {getScore} from '../utils';
 import {Status} from '../enums';
 
 export default class GameScreen {
@@ -28,6 +27,7 @@ export default class GameScreen {
           App.showResult({
             status: Status.TIME_OVER
           });
+          clearTimeout(this._timeout);
         } else {
           startTimeout();
         }
@@ -64,15 +64,9 @@ export default class GameScreen {
     if (hasNext) {
       this._view.updateSubViews();
     } else {
-      const fastAnswersCount = this._model.answers.filter((answ) => {
-        return answ.isCorrect && (answ.timeInSec <= config.fastAnswerTime);
-      }).length;
       App.showResult({
         status: Status.WIN,
-        score: getScore(this._model.answers, config.maxMistakesCount - this._model.mistakesCnt - 1),
-        winInSeconds: config.maxTime - this._timer.remainingTime,
-        fastAnswersCount,
-        mistakesCnt: this._model.mistakesCnt
+        answers: this._model.answers
       });
     }
   }

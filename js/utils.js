@@ -1,3 +1,5 @@
+import config from './config';
+
 export const getScore = (answers, remainingNotes) => {
   if (!Array.isArray(answers)) {
     throw new TypeError(`First passed argument is not instance of Array`);
@@ -56,4 +58,30 @@ export const getElement = (htmlMarkup) => {
 
 export const getTimeStrFromNumber = (time) => {
   return time < 10 ? `0${time}` : time;
+};
+
+export const getMistacesCnt = (answers) => {
+  let cnt = 0;
+  for (const ans of answers) {
+    if (!ans.isCorrect) {
+      cnt++;
+    }
+  }
+  return cnt;
+};
+
+export const getWinResultFromAnswers = (answers) => {
+  const fastAnswersCount = answers.filter((answ) => {
+    return answ.isCorrect && (answ.timeInSec <= config.fastAnswerTime);
+  }).length;
+  const mistakesCnt = getMistacesCnt(answers);
+  const winInSeconds = answers.reduce((timeSum, currAns) => {
+    return timeSum + currAns.timeInSec;
+  }, 0);
+  return {
+    score: getScore(answers, config.maxMistakesCount - mistakesCnt - 1),
+    winInSeconds,
+    fastAnswersCount,
+    mistakesCnt
+  };
 };

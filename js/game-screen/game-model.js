@@ -1,21 +1,22 @@
+import {getMistacesCnt} from '../utils';
+
 export default class GameModel {
   constructor(questions) {
     this._questions = questions;
+    this._cachedMistacesCnt = 0;
   }
 
   init(answers = []) {
     this.currentQuestion = null;
     this.answers = answers;
+    this._lastAnswersLength = this.answers.length;
   }
 
   get mistakesCnt() {
-    let cnt = 0;
-    for (const ans of this.answers) {
-      if (!ans.isCorrect) {
-        cnt++;
-      }
+    if (this.answers.length !== this._lastAnswersLength) {
+      this._cachedMistacesCnt = getMistacesCnt(this.answers);
     }
-    return cnt;
+    return this._cachedMistacesCnt;
   }
 
   nextQuestion(startRemainingTime) {

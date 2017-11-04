@@ -28,22 +28,20 @@ export default class GameGenreView extends AbstractView {
     const players = [];
     const genreAnswerEls = [...this.element.querySelectorAll(`.genre .genre-answer`)];
 
-    for (const i in answers) {
-      if (answers.hasOwnProperty(i)) {
-        const answer = answers[i];
-        const genreAnswerEl = genreAnswerEls[i];
-        const player = new PlayerView(false, answer.src);
-        player.onPlayClick = () => {
-          for (const pl of players) {
-            if (pl === player) {
-              continue;
-            }
-            pl.stop();
+    for (let i = 0; i < answers.length; i++) {
+      const answer = answers[i];
+      const genreAnswerEl = genreAnswerEls[i];
+      const player = new PlayerView(false, answer.src);
+      player.onPlayClick = () => {
+        for (const pl of players) {
+          if (pl === player) {
+            continue;
           }
-        };
-        players.push(player);
-        genreAnswerEl.insertAdjacentElement(`afterbegin`, player.element);
-      }
+          pl.stop();
+        }
+      };
+      players.push(player);
+      genreAnswerEl.insertAdjacentElement(`afterbegin`, player.element);
     }
 
     const form = this.element.querySelector(`.genre`);
