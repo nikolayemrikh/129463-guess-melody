@@ -6,7 +6,7 @@ import GameView from './game-view';
 import changeView from '../utils/change-view';
 import {Status} from '../enums';
 
-const timeInterval = 1000;
+const TIME_INTERVAL = 1000;
 
 export default class GameScreen {
   constructor(questions) {
@@ -32,7 +32,7 @@ export default class GameScreen {
         } else {
           startTimeout();
         }
-      }, timeInterval);
+      }, TIME_INTERVAL);
     };
     changeView(this._view);
     this._view.onAnswer = this.onAnswer.bind(this);
