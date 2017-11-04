@@ -56,7 +56,7 @@ export const getElement = (htmlMarkup) => {
   return div.firstElementChild;
 };
 
-export const getTimeStrFromNumber = (time) => {
+export const formatTime = (time) => {
   return time < 10 ? `0${time}` : time;
 };
 

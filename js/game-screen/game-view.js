@@ -2,7 +2,7 @@ import config from '../config';
 import AbstractView from '../abstract-view';
 import GameArtistView from './subviews/artist-view';
 import GameGenreView from './subviews/genre-view';
-import {getTimeStrFromNumber} from '../utils';
+import {formatTime} from '../utils';
 import {GameType} from '../enums';
 
 const CIRCLE_RADIUS = 370;
@@ -77,7 +77,7 @@ export default class GameView extends AbstractView {
   _getTimeText(remainingTime) {
     const minutes = Math.floor(remainingTime / 60);
     const seconds = remainingTime - (minutes * 60);
-    return [minutes, seconds].map((num) => getTimeStrFromNumber(num));
+    return [minutes, seconds].map((num) => formatTime(num));
   }
 
   updateTimer(remainingTime) {

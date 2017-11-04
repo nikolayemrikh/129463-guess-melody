@@ -5,7 +5,6 @@ export default class Timer {
     }
     this._remainingTime = seconds;
     this._isDone = seconds === 0;
-    this._listeners = [];
   }
 
   tick() {

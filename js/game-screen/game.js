@@ -51,7 +51,7 @@ export default class GameScreen {
     this._model.answers.push(answer);
 
     if (!isCorrect) {
-      if (this._model.mistakesCnt === 4) {
+      if (this._model.mistakesCnt === config.maxMistakesCount) {
         App.showResult({
           status: Status.ATTEMPTS_OVER
         });

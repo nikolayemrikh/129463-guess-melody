@@ -3,12 +3,12 @@ import {getMistacesCnt} from '../utils';
 export default class GameModel {
   constructor(questions) {
     this._questions = questions;
-    this._cachedMistacesCnt = 0;
   }
 
   init() {
     this.currentQuestion = null;
     this.answers = [];
+    this._cachedMistacesCnt = 0;
     this._lastAnswersLength = this.answers.length;
   }
 

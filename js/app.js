@@ -27,15 +27,15 @@ export default class App {
     };
     window.onhashchange = hashChangeHandler;
 
-    fetch(config.dataUrl).then((questionsData) => {
-      questionsData.json().then((questions) => {
-        this.questions = questions;
-        this.gameScreen = new GameScreen(questions);
-        hashChangeHandler();
-      }).catch(() => {
-        hashChangeHandler();
-      });
-    });
+    fetch(config.dataUrl)
+        .then((data) => data.json())
+        .then((questions) => {
+          this.questions = questions;
+          this.gameScreen = new GameScreen(questions);
+          hashChangeHandler();
+        }).catch(() => {
+          hashChangeHandler();
+        });
   }
 
   /**
@@ -47,13 +47,6 @@ export default class App {
       return;
     }
     greetingScreen.init();
-  }
-
-  /**
-   * Показывает экран приветствия
-   */
-  static showGreeting() {
-    location.hash = ScreenHash.GREETING;
   }
 
   /**

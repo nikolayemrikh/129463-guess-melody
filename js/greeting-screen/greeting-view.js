@@ -9,9 +9,8 @@ const PluralForm = {
 };
 
 export default class GreetingView extends AbstractView {
-  constructor(state) {
+  constructor() {
     super();
-    this._state = state;
   }
 
   get template() {
