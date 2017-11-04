@@ -29,12 +29,4 @@ export default class GameModel {
     this.currentQuestion = null;
     return false;
   }
-
-  get answersSummaryTime() {
-    let time = 0;
-    for (const ans of this.answers) {
-      time += ans.timeInSec;
-    }
-    return time;
-  }
 }
