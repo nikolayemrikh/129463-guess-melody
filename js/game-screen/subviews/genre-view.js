@@ -37,7 +37,7 @@ export default class GameGenreView extends AbstractView {
           if (pl === player) {
             continue;
           }
-          pl.stop();
+          pl.pause();
         }
       };
       players.push(player);

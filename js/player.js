@@ -52,10 +52,5 @@ export default class PlayerView extends AbstractView {
     this.audioBtn.classList.add(PlayerControlClass.PLAY);
   }
 
-  stop() {
-    this.pause();
-    this.audioEl.currentTime = 0;
-  }
-
   onPlayClick() {}
 }
